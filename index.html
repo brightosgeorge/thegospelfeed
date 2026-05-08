@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Gospel Feed — The front page of the Christian internet</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0A1628;--navy-2:#0E1D33;--navy-3:#12243E;--gold:#D4AF37;--gold-light:#F0D675;--gold-dim:rgba(212,175,55,0.12);--gold-faint:rgba(212,175,55,0.05);--cream:#FDFBF7;--warm:#F8F5EF;--card:rgba(255,255,255,0.82);--cborder:rgba(0,0,0,0.06);--t1:#1A1814;--t2:#4A453E;--t3:#8A8480;--t4:#B5B0AB;--blue:#3B82F6;--green:#10B981;--amber:#F59E0B;--purple:#8B5CF6;--rose:#F43F5E;--teal:#14B8A6;--serif:'Fraunces',Georgia,serif;--sans:'Outfit',-apple-system,sans-serif;--r:clamp(10px,1.2vw,16px);--rl:clamp(14px,1.6vw,24px)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:clamp(15px,1vw+12px,18px)}
+body{font-family:var(--sans);background:var(--cream);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+@keyframes orb-move{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.1)}66%{transform:translate(-15px,10px) scale(0.95)}}
+@keyframes fade-up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.fu{opacity:0;animation:fade-up .7s cubic-bezier(.22,1,.36,1) forwards}
+.fi{opacity:0;animation:fade-in .6s ease forwards}
+body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");opacity:.5}
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,22,40,.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);padding:0 clamp(16px,4vw,48px);display:flex;align-items:center;justify-content:space-between;height:clamp(56px,7vw,72px);border-bottom:.5px solid rgba(212,175,55,.1)}
+.nav-logo{display:flex;align-items:center;gap:clamp(8px,1vw,12px);text-decoration:none}
+.lm{width:clamp(30px,3.5vw,40px);height:clamp(30px,3.5vw,40px);background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:clamp(6px,.8vw,10px);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(212,175,55,.3);transition:transform .3s,box-shadow .3s}
+.nav-logo:hover .lm{transform:rotate(6deg) scale(1.08);box-shadow:0 4px 20px rgba(212,175,55,.5)}
+.lm svg{width:55%;height:55%;stroke:var(--navy);fill:none;stroke-width:2.2}
+.lt{font-size:clamp(14px,1.5vw,18px);font-weight:500;color:#fff;letter-spacing:-.01em}
+.lt span{color:var(--gold-light);font-weight:600}
+.nls{display:flex;gap:clamp(16px,2.5vw,32px)}
+.nls a{font-size:clamp(12px,.85rem,14px);color:rgba(255,255,255,.45);text-decoration:none;font-weight:400;transition:color .25s;position:relative}
+.nls a:hover{color:var(--gold-light)}.nls a.active{color:var(--gold-light);font-weight:500}
+.nls a.active::after{content:'';position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--gold)}
+.nr{display:flex;align-items:center;gap:clamp(8px,1vw,14px)}
+.ns{width:clamp(32px,3.5vw,40px);height:clamp(32px,3.5vw,40px);border-radius:50%;border:.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s}
+.ns:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
+.ns svg{width:42%;height:42%;stroke:rgba(255,255,255,.5);fill:none;stroke-width:1.5}
+.nc{font-family:var(--sans);font-size:clamp(11px,.8rem,13px);font-weight:500;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);border:none;padding:clamp(6px,.8vw,10px) clamp(14px,2vw,24px);border-radius:50px;cursor:pointer;transition:all .25s;box-shadow:0 2px 12px rgba(212,175,55,.25)}
+.nc:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(212,175,55,.4)}
+.mt{display:none;width:36px;height:36px;border-radius:50%;border:.5px solid rgba(255,255,255,.1);background:0 0;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.mt span{display:block;width:16px;height:1.5px;background:rgba(255,255,255,.6);border-radius:1px}
+.hero{background:var(--navy);padding:clamp(24px,4vw,48px) clamp(16px,4vw,48px) 0;position:relative;overflow:hidden;min-height:clamp(400px,55vh,620px)}
+.hm{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ho{position:absolute;border-radius:50%;filter:blur(80px);animation:orb-move 12s ease-in-out infinite}
+.ho1{width:clamp(300px,40vw,600px);height:clamp(300px,40vw,600px);top:-20%;right:-10%;background:rgba(212,175,55,.08)}
+.ho2{width:clamp(200px,30vw,450px);height:clamp(200px,30vw,450px);bottom:-15%;left:-5%;background:rgba(59,130,246,.06);animation-delay:-4s}
+.ho3{width:clamp(150px,20vw,300px);height:clamp(150px,20vw,300px);top:30%;left:40%;background:rgba(139,92,246,.04);animation-delay:-8s}
+.hero-fade{position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to bottom,transparent,var(--cream));pointer-events:none;z-index:2}
+.hi{position:relative;z-index:1;max-width:1280px;margin:0 auto}
+.ht{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(20px,3vw,36px)}
+.hg{font-size:clamp(12px,.85rem,14px);color:rgba(255,255,255,.35);font-weight:300;letter-spacing:.02em}
+.hd{font-size:clamp(10px,.7rem,12px);color:var(--gold);border:.5px solid rgba(212,175,55,.3);padding:5px 14px;border-radius:50px;backdrop-filter:blur(8px);background:rgba(212,175,55,.06)}
+.hgrid{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(12px,2vw,20px);padding-bottom:clamp(40px,6vw,80px)}
+.hfeat{background:rgba(255,255,255,.04);backdrop-filter:blur(16px);border:.5px solid rgba(255,255,255,.08);border-radius:var(--rl);padding:clamp(22px,3vw,36px);cursor:pointer;position:relative;overflow:hidden;transition:all .35s cubic-bezier(.22,1,.36,1)}
+.hfeat:hover{border-color:rgba(212,175,55,.3);background:rgba(255,255,255,.06);transform:translateY(-3px)}
+.hfeat:hover .hft{color:var(--gold-light)}
+.hfg{position:absolute;top:-50%;right:-30%;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.08) 0%,transparent 70%);pointer-events:none}
+.hftp{display:flex;align-items:center;gap:clamp(8px,1vw,12px);margin-bottom:clamp(14px,2vw,20px)}
+.hfb{font-size:clamp(9px,.6rem,11px);font-weight:600;letter-spacing:.1em;text-transform:uppercase;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);padding:4px 14px;border-radius:50px}
+.hfs{font-size:clamp(11px,.7rem,13px);color:rgba(255,255,255,.35)}
+.hft{font-family:var(--serif);font-size:clamp(20px,2.5vw,32px);font-weight:400;color:#fff;line-height:1.3;margin-bottom:clamp(16px,2vw,24px);transition:color .3s;letter-spacing:-.01em}
+.hfr{height:.5px;background:rgba(255,255,255,.06);margin-bottom:clamp(14px,2vw,20px)}
+.hfm{display:flex;align-items:center;gap:clamp(10px,1.2vw,16px);flex-wrap:wrap}
+.hfa{width:clamp(26px,3vw,34px);height:clamp(26px,3vw,34px);border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-light));display:flex;align-items:center;justify-content:center;font-size:clamp(10px,.65rem,12px);font-weight:600;color:var(--navy)}
+.hfn{font-size:clamp(12px,.75rem,14px);color:rgba(255,255,255,.55)}
+.hfd{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.15)}
+.hfdt{font-size:clamp(11px,.7rem,13px);color:rgba(255,255,255,.3)}
+.hstk{display:flex;flex-direction:column;gap:clamp(8px,1.2vw,12px)}
+.hsc{backdrop-filter:blur(12px);background:rgba(255,255,255,.03);border:.5px solid rgba(255,255,255,.06);border-radius:var(--r);padding:clamp(14px,2vw,22px);cursor:pointer;flex:1;display:flex;flex-direction:column;justify-content:center;transition:all .3s cubic-bezier(.22,1,.36,1)}
+.hsc:hover{border-color:rgba(212,175,55,.25);background:rgba(255,255,255,.05);transform:translateX(4px)}
+.hsc:hover .hsct{color:var(--gold-light)}
+.hsctg{font-size:clamp(9px,.6rem,11px);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:clamp(4px,.5vw,8px)}
+.tfa{color:#60A5FA}.tdv{color:#6EE7B7}.tld{color:var(--gold-light)}
+.hsct{font-family:var(--serif);font-size:clamp(13px,1vw,16px);font-weight:400;color:rgba(255,255,255,.85);line-height:1.4;margin-bottom:clamp(6px,.8vw,10px);transition:color .25s}
+.hscm{font-size:clamp(10px,.65rem,12px);color:rgba(255,255,255,.25)}
+.verse{background:var(--navy-2);padding:clamp(14px,2vw,20px) clamp(16px,4vw,48px);display:flex;align-items:center;gap:clamp(12px,2vw,20px);border-top:.5px solid rgba(212,175,55,.06);position:relative;z-index:3}
+.vi{width:clamp(28px,3vw,36px);height:clamp(28px,3vw,36px);min-width:28px;border-radius:50%;background:var(--gold-dim);display:flex;align-items:center;justify-content:center}
+.vi svg{width:45%;height:45%;stroke:var(--gold);fill:none;stroke-width:1.5}
+.vt{font-family:var(--serif);font-size:clamp(13px,.85rem,15px);color:rgba(255,255,255,.55);line-height:1.5;flex:1;font-style:italic}
+.vr{font-size:clamp(10px,.65rem,12px);font-weight:600;color:var(--gold);white-space:nowrap}
+.fb{background:var(--warm);padding:0 clamp(16px,4vw,48px);display:flex;align-items:center;gap:clamp(4px,.6vw,8px);height:clamp(44px,5.5vw,56px);overflow-x:auto;border-bottom:.5px solid rgba(0,0,0,.06);position:sticky;top:clamp(56px,7vw,72px);z-index:90;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.fb::-webkit-scrollbar{display:none}
+.fp{font-family:var(--sans);font-size:clamp(11px,.75rem,13px);font-weight:500;padding:clamp(5px,.6vw,7px) clamp(12px,1.5vw,18px);border-radius:50px;border:1px solid transparent;color:var(--t3);cursor:pointer;white-space:nowrap;transition:all .25s;background:0 0}
+.fp:hover{background:rgba(0,0,0,.04);color:var(--t2)}
+.fp.active{background:var(--navy);color:var(--gold-light);box-shadow:0 2px 8px rgba(10,22,40,.2)}
+.main{max-width:1280px;margin:0 auto;padding:clamp(24px,3.5vw,40px) clamp(16px,4vw,48px);display:grid;grid-template-columns:1fr clamp(240px,22vw,300px);gap:clamp(20px,3vw,40px)}
+.sh{display:flex;align-items:center;gap:12px;margin-bottom:clamp(14px,2vw,20px)}
+.sht{font-size:clamp(10px,.65rem,12px);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);white-space:nowrap}
+.shl{flex:1;height:.5px;background:var(--cborder)}
+.sha{font-size:clamp(11px,.7rem,13px);color:var(--gold);font-weight:500;cursor:pointer;white-space:nowrap;text-decoration:none}
+.cg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.5vw,16px);margin-bottom:clamp(24px,3vw,36px)}
+.cd{background:var(--card);backdrop-filter:blur(8px);border:.5px solid var(--cborder);border-radius:var(--rl);padding:clamp(16px,2vw,22px);cursor:pointer;position:relative;overflow:hidden;transition:all .35s cubic-bezier(.22,1,.36,1);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.cd:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08);border-color:transparent}
+.cs{position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--rl) var(--rl) 0 0}
+.sb{background:linear-gradient(90deg,var(--blue),#60A5FA)}.sg{background:linear-gradient(90deg,var(--green),#6EE7B7)}.sa{background:linear-gradient(90deg,var(--amber),#FBBF24)}.sp{background:linear-gradient(90deg,var(--purple),#A78BFA)}.sr{background:linear-gradient(90deg,var(--rose),#FB7185)}.stl{background:linear-gradient(90deg,var(--teal),#5EEAD4)}
+.cdt{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(8px,1vw,12px)}
+.tg{font-size:clamp(9px,.6rem,11px);font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:50px}
+.tf{background:#EFF6FF;color:#1D4ED8}.td{background:#ECFDF5;color:#047857}.tl{background:#FFFBEB;color:#B45309}.tm{background:#F5F3FF;color:#6D28D9}.tgr{background:#FFF1F2;color:#BE123C}.ty{background:#F0FDF4;color:#15803D}.ts{background:#EFF6FF;color:#1D4ED8}
+.sv{width:clamp(28px,3vw,34px);height:clamp(28px,3vw,34px);border-radius:50%;border:1px solid rgba(0,0,0,.08);background:var(--warm);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t4);transition:all .25s}
+.sv:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-faint)}
+.sv.saved{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.sv svg{width:44%;height:44%;stroke:currentColor;stroke-width:1.5;fill:none}
+.sv.saved svg{fill:var(--gold)}
+.cdtl{font-family:var(--serif);font-size:clamp(14px,1vw,17px);font-weight:400;color:var(--t1);line-height:1.45;margin-bottom:clamp(12px,1.5vw,18px);letter-spacing:-.01em}
+.cdf{display:flex;align-items:center;justify-content:space-between;padding-top:clamp(10px,1.2vw,14px);border-top:.5px solid rgba(0,0,0,.05)}
+.cds{font-size:clamp(10px,.65rem,12px);color:var(--t3)}.cdtm{font-size:clamp(10px,.65rem,12px);color:var(--t4)}
+.lr{display:flex;align-items:flex-start;gap:clamp(10px,1.2vw,16px);padding:clamp(12px,1.5vw,16px) 0;border-bottom:.5px solid rgba(0,0,0,.05);cursor:pointer;transition:all .2s}
+.lr:last-child{border-bottom:none}.lr:hover .lrt{color:var(--gold)}.lr:hover{padding-left:6px}
+.lrn{font-family:var(--serif);font-size:clamp(18px,1.8vw,26px);font-weight:300;color:rgba(0,0,0,.1);min-width:clamp(24px,2.5vw,32px);line-height:1}
+.lrb{flex:1}
+.lrtg{font-size:clamp(9px,.6rem,11px);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.lrt{font-family:var(--serif);font-size:clamp(13px,.85rem,15px);font-weight:400;color:var(--t1);line-height:1.4;margin-bottom:4px;transition:color .25s}
+.lrm{font-size:clamp(10px,.65rem,12px);color:var(--t4)}
+.sc{background:var(--card);backdrop-filter:blur(8px);border:.5px solid var(--cborder);border-radius:var(--rl);overflow:hidden;margin-bottom:clamp(14px,1.8vw,20px);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.sch{background:var(--navy);padding:clamp(12px,1.5vw,16px) clamp(14px,1.8vw,20px);display:flex;align-items:center;justify-content:space-between}
+.scht{font-size:clamp(11px,.75rem,13px);font-weight:500;color:#fff}
+.schb{font-size:clamp(9px,.6rem,11px);color:var(--gold);background:var(--gold-dim);padding:3px 10px;border-radius:50px}
+.scb{padding:clamp(12px,1.5vw,16px) clamp(14px,1.8vw,20px)}
+.vct{font-family:var(--serif);font-size:clamp(13px,.85rem,16px);color:var(--t1);line-height:1.65;margin-bottom:8px;font-style:italic}
+.vcr{font-size:clamp(10px,.65rem,12px);font-weight:600;color:var(--gold)}
+.ti{display:flex;align-items:flex-start;gap:10px;padding:clamp(8px,1vw,12px) 0;border-bottom:.5px solid rgba(0,0,0,.05);cursor:pointer}
+.ti:last-child{border-bottom:none}.ti:hover .tit{color:var(--gold)}
+.tin{font-family:var(--serif);font-size:clamp(14px,1.2vw,18px);font-weight:300;color:rgba(0,0,0,.12);min-width:20px}
+.tit{font-size:clamp(12px,.75rem,13px);font-weight:500;color:var(--t1);line-height:1.4;margin-bottom:2px;transition:color .25s}
+.tim{font-size:clamp(10px,.6rem,11px);color:var(--t4)}
+.spo{background:var(--warm);border:.5px solid var(--cborder);border-radius:var(--rl);padding:clamp(14px,1.8vw,18px);margin-bottom:clamp(14px,1.8vw,20px);display:flex;align-items:center;gap:clamp(10px,1.2vw,14px);cursor:pointer;transition:all .25s}
+.spo:hover{border-color:rgba(0,0,0,.12)}
+.spoi{width:clamp(36px,4vw,44px);height:clamp(36px,4vw,44px);min-width:36px;border-radius:var(--r);background:var(--navy);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(10,22,40,.15)}
+.spoi svg{width:45%;height:45%;stroke:var(--gold);fill:none;stroke-width:1.5}
+.spol{font-size:clamp(9px,.6rem,10px);font-weight:600;color:var(--t4);letter-spacing:.08em;text-transform:uppercase}
+.spon{font-size:clamp(12px,.8rem,14px);font-weight:500;color:var(--t1)}
+.spod{font-size:clamp(11px,.7rem,12px);color:var(--t3)}
+.nl{background:var(--navy);border-radius:var(--rl);padding:clamp(20px,2.5vw,28px);position:relative;overflow:hidden}
+.nlg{position:absolute;top:-40px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.1) 0%,transparent 70%);pointer-events:none}
+.nli{width:clamp(36px,4vw,44px);height:clamp(36px,4vw,44px);background:var(--gold-dim);border-radius:var(--r);display:flex;align-items:center;justify-content:center;margin-bottom:clamp(12px,1.5vw,16px)}
+.nli svg{width:50%;height:50%;stroke:var(--gold);fill:none;stroke-width:1.5}
+.nlt{font-family:var(--serif);font-size:clamp(15px,1.1rem,18px);font-weight:400;color:#fff;margin-bottom:6px}
+.nlsb{font-size:clamp(11px,.7rem,13px);color:rgba(255,255,255,.4);line-height:1.5;margin-bottom:clamp(14px,1.8vw,18px)}
+.nlin{width:100%;font-family:var(--sans);font-size:clamp(13px,.85rem,15px);padding:clamp(10px,1.2vw,13px) clamp(12px,1.5vw,16px);border-radius:var(--r);border:.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#fff;outline:0;margin-bottom:clamp(8px,1vw,12px);transition:border-color .25s}
+.nlin::placeholder{color:rgba(255,255,255,.2)}.nlin:focus{border-color:var(--gold)}
+.nlbn{width:100%;font-family:var(--sans);font-size:clamp(12px,.8rem,14px);font-weight:600;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);border:none;padding:clamp(10px,1.2vw,13px);border-radius:var(--r);cursor:pointer;transition:all .25s;box-shadow:0 2px 12px rgba(212,175,55,.25);position:relative;z-index:1}
+.nlbn:hover{box-shadow:0 4px 20px rgba(212,175,55,.4)}
+.nltr{font-size:clamp(10px,.6rem,11px);color:rgba(255,255,255,.2);margin-top:clamp(10px,1.2vw,14px);text-align:center}
+.ft{background:var(--navy);padding:clamp(36px,5vw,56px) clamp(16px,4vw,48px);margin-top:clamp(32px,4vw,48px)}
+.fti{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(24px,4vw,48px)}
+.ftl{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ftlm{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:6px;display:flex;align-items:center;justify-content:center}
+.ftlm svg{width:55%;height:55%;stroke:var(--navy);fill:none;stroke-width:2.2}
+.ftlt{font-size:15px;font-weight:500;color:#fff}.ftlt span{color:var(--gold-light);font-weight:600}
+.ftd{font-size:clamp(11px,.7rem,13px);color:rgba(255,255,255,.3);line-height:1.7;max-width:300px}
+.ftct{font-size:clamp(10px,.6rem,11px);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.ftlk{display:block;font-size:clamp(12px,.8rem,14px);color:rgba(255,255,255,.4);text-decoration:none;margin-bottom:10px;transition:color .2s}
+.ftlk:hover{color:var(--gold-light)}
+.ftb{max-width:1280px;margin:clamp(20px,3vw,32px) auto 0;padding-top:20px;border-top:.5px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between}
+.ftc{font-size:clamp(10px,.6rem,12px);color:rgba(255,255,255,.2)}
+.bn{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(10,22,40,.95);backdrop-filter:blur(20px);border-top:.5px solid rgba(212,175,55,.1);padding:6px 0 env(safe-area-inset-bottom,8px);z-index:100}
+.bni{display:flex;align-items:center;justify-content:space-around}
+.bnit{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;cursor:pointer;text-decoration:none}
+.bnit svg{width:20px;height:20px;stroke:rgba(255,255,255,.35);fill:none;stroke-width:1.5}
+.bnit span{font-size:10px;color:rgba(255,255,255,.35);font-weight:500}
+.bnit.active svg{stroke:var(--gold)}.bnit.active span{color:var(--gold)}
+@media(max-width:900px){.nls{display:none}.mt{display:flex}.hgrid{grid-template-columns:1fr}.main{grid-template-columns:1fr}}
+@media(max-width:600px){.cg{grid-template-columns:1fr}.ht{flex-direction:column;align-items:flex-start;gap:8px}.fti{grid-template-columns:1fr;gap:20px}.ftb{flex-direction:column;gap:6px;text-align:center}.bn{display:block}.main{padding-bottom:100px}.sv{width:36px;height:36px}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-logo" href="#"><div class="lm"><svg viewBox="0 0 18 18"><path d="M9 2v14M5 6h8"/><circle cx="9" cy="9" r="6" opacity="0.3"/></svg></div><div class="lt">The<span>Gospel</span>Feed</div></a>
+  <div class="nls"><a href="#" class="active">Feed</a><a href="#">Topics</a><a href="#">Sermons</a><a href="#">Saved</a></div>
+  <div class="nr"><button class="ns"><svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4"/><path d="M10 10l3.5 3.5"/></svg></button><button class="nc">Get the digest</button><button class="mt" onclick="alert('Menu')"><span></span><span></span><span></span></button></div>
+</nav>
+<section class="hero">
+  <div class="hm"><div class="ho ho1"></div><div class="ho ho2"></div><div class="ho ho3"></div></div>
+  <div class="hero-fade"></div>
+  <div class="hi">
+    <div class="ht fi"><div class="hg">Good morning — here's what the Gospel world is reading today</div><div class="hd">Thursday, 30 Apr 2026</div></div>
+    <div class="hgrid">
+      <div class="hfeat fu">
+        <div class="hfg"></div>
+        <div class="hftp"><div class="hfb">Editor's pick</div><span class="hfs">Desiring God &middot; Sermon</span></div>
+        <div class="hft">When God feels silent: trusting his presence in the darkest seasons of life</div>
+        <div class="hfr"></div>
+        <div class="hfm"><div class="hfa">JP</div><span class="hfn">John Piper</span><span class="hfd"></span><span class="hfdt">8 min read</span><span class="hfd"></span><span class="hfdt">2.4k saves</span></div>
+      </div>
+      <div class="hstk">
+        <div class="hsc fu" style="animation-delay:.1s"><div class="hsctg tfa">Faith</div><div class="hsct">How to build a prayer habit that actually sticks in a distracted world</div><div class="hscm">The Gospel Coalition &middot; 5 min</div></div>
+        <div class="hsc fu" style="animation-delay:.2s"><div class="hsctg tdv">Devotional</div><div class="hsct">Morning manna: finding strength in Scripture before the day begins</div><div class="hscm">Christianity Today &middot; 4 min</div></div>
+        <div class="hsc fu" style="animation-delay:.3s"><div class="hsctg tld">Leadership</div><div class="hsct">Servant leadership: what the church taught me about managing teams</div><div class="hscm">Faith &amp; Work &middot; 6 min</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="verse"><div class="vi"><svg viewBox="0 0 16 16"><path d="M4 2v12M8 2v12M12 2v12M2 5h12M2 9h12"/></svg></div><div class="vt">"I can do all things through Christ who strengthens me."</div><div class="vr">Philippians 4:13</div></div>
+<div class="fb" id="filterBar"><button class="fp active" data-filter="all">All</button><button class="fp" data-filter="faith">Faith</button><button class="fp" data-filter="devotional">Devotionals</button><button class="fp" data-filter="sermon">Sermons</button><button class="fp" data-filter="leadership">Leadership</button><button class="fp" data-filter="marriage">Marriage</button><button class="fp" data-filter="grief">Grief</button><button class="fp" data-filter="youth">Youth</button></div>
+<div class="main">
+  <div>
+    <div class="sh"><span class="sht">Today's feed</span><span class="shl"></span><a class="sha">24 articles &rarr;</a></div>
+    <div class="cg" id="cardGrid"></div>
+    <div class="sh" id="moreHead"><span class="sht">More today</span><span class="shl"></span></div>
+    <div id="listSection"></div>
+  </div>
+  <div>
+    <div class="sc"><div class="sch"><span class="scht">Trending this week</span></div><div class="scb" style="padding-top:8px;padding-bottom:8px">
+      <div class="ti"><div class="tin">1</div><div><div class="tit">The power of fasting in a world of noise</div><div class="tim">8.2k reads &middot; Desiring God</div></div></div>
+      <div class="ti"><div class="tin">2</div><div><div class="tit">How to read the Bible in a year — and enjoy it</div><div class="tim">6.1k reads &middot; YouVersion</div></div></div>
+      <div class="ti"><div class="tin">3</div><div><div class="tit">When your church feels like a desert</div><div class="tim">4.8k reads &middot; TGC</div></div></div>
+      <div class="ti"><div class="tin">4</div><div><div class="tit">Grace for the prodigal who comes home again</div><div class="tim">3.5k reads &middot; Crossway</div></div></div>
+    </div></div>
+    <div class="spo"><div class="spoi"><svg viewBox="0 0 16 16"><path d="M2 3h12v10H2z"/><path d="M5 3V1.5h6V3"/><path d="M8 6.5v3M6.5 8h3"/></svg></div><div><div class="spol">Sponsor</div><div class="spon">ESV Study Bible</div><div class="spod">Deep study. Beautiful design. Free app.</div></div></div>
+    <div class="nl"><div class="nlg"></div><div class="nli"><svg viewBox="0 0 18 18"><rect x="2" y="4" width="14" height="11" rx="2"/><path d="M2 7l7 5 7-5" stroke-linecap="round"/></svg></div><div class="nlt">The Sunday Digest</div><div class="nlsb">The 7 best Christian reads, delivered free every Sunday morning.</div><input class="nlin" type="email" placeholder="your@email.com" id="nlEmail"><button class="nlbn" id="nlBtn">Subscribe free</button><div class="nltr">Join 12,000+ believers worldwide</div></div>
+  </div>
+</div>
+<footer class="ft">
+  <div class="fti">
+    <div><div class="ftl"><div class="ftlm"><svg viewBox="0 0 18 18"><path d="M9 2v14M5 6h8"/><circle cx="9" cy="9" r="6" opacity="0.3"/></svg></div><div class="ftlt">The<span>Gospel</span>Feed</div></div><p class="ftd">Your daily feed of the best sermons, devotionals, and Christian content from across the web. Curated for believers, by believers.</p></div>
+    <div><div class="ftct">Browse</div><a class="ftlk" href="#">Today's Feed</a><a class="ftlk" href="#">Topics</a><a class="ftlk" href="#">Sermons</a><a class="ftlk" href="#">Devotionals</a><a class="ftlk" href="#">Newsletter</a></div>
+    <div><div class="ftct">Topics</div><a class="ftlk" href="#">Faith</a><a class="ftlk" href="#">Marriage</a><a class="ftlk" href="#">Leadership</a><a class="ftlk" href="#">Grief</a><a class="ftlk" href="#">Youth</a></div>
+    <div><div class="ftct">About</div><a class="ftlk" href="#">Our Mission</a><a class="ftlk" href="#">Sources</a><a class="ftlk" href="#">Advertise</a><a class="ftlk" href="#">Contact</a><a class="ftlk" href="#">Privacy</a></div>
+  </div>
+  <div class="ftb"><span class="ftc">&copy; 2026 The Gospel Feed. All rights reserved.</span><span class="ftc">Made with faith &middot; Lagos, Nigeria</span></div>
+</footer>
+<div class="bn"><div class="bni">
+  <a class="bnit active" href="#"><svg viewBox="0 0 20 20"><path d="M3 8l7-5 7 5v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8z"/></svg><span>Feed</span></a>
+  <a class="bnit" href="#"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 3"/></svg><span>Topics</span></a>
+  <a class="bnit" href="#"><svg viewBox="0 0 20 20"><path d="M3 3h14v14H3z"/><path d="M7 3V1M13 3V1M3 7h14"/></svg><span>Sermons</span></a>
+  <a class="bnit" href="#"><svg viewBox="0 0 20 20"><path d="M5 3h10v15l-5-3-5 3V3z"/></svg><span>Saved</span></a>
+  <a class="bnit" href="#"><svg viewBox="0 0 20 20"><circle cx="10" cy="6" r="3"/><path d="M3 18c0-4 3-7 7-7s7 3 7 7"/></svg><span>Profile</span></a>
+</div></div>
+<script>
+const A=[
+{id:1,t:"marriage",title:"Forgiveness as a daily practice: keeping your marriage rooted in grace",s:"Focus on the Family",m:"5 min",a:"3h ago",c:"sp"},
+{id:2,t:"devotional",title:"A 5-minute devotional for the overwhelmed parent who can't find time",s:"Her.meneutics",m:"5 min",a:"4h ago",c:"sg"},
+{id:3,t:"faith",title:"Why doubt is not the opposite of faith — it's part of the journey",s:"Relevant Magazine",m:"5 min",a:"2h ago",c:"sb"},
+{id:4,t:"youth",title:"Talking to Gen Z about faith without sounding out of touch",s:"YouVersion",m:"6 min",a:"5h ago",c:"stl"},
+{id:5,t:"grief",title:"What the Psalms say about crying out to God in unimaginable pain",s:"Bible Project",m:"7 min",a:"1h ago",c:"sr"},
+{id:6,t:"faith",title:"The theology of rest: what Sabbath really means in a hustle culture",s:"Crossway",m:"6 min",a:"3h ago",c:"sb"},
+{id:7,t:"leadership",title:"Pastoring through burnout: lessons from Elijah under the broom tree",s:"9Marks",m:"8 min",a:"6h ago",c:"sa"},
+{id:8,t:"devotional",title:"Evening prayers: how to close your day anchored in Scripture",s:"Praying Through",m:"4 min",a:"7h ago",c:"sg"},
+{id:9,t:"sermon",title:"Tim Keller on the radical generosity of the early church",s:"Gospel in Life",m:"12 min",a:"8h ago",c:"sb"},
+{id:10,t:"marriage",title:"How to fight fair: conflict resolution rooted in Ephesians 4",s:"FamilyLife",m:"6 min",a:"9h ago",c:"sp"},
+{id:11,t:"faith",title:"Why community matters more than personal quiet time (hear me out)",s:"The Gospel Coalition",m:"7 min",a:"5h ago",c:"sb"},
+{id:12,t:"grief",title:"Walking with friends through loss: what not to say and what helps",s:"Christianity Today",m:"5 min",a:"4h ago",c:"sr"},
+];
+const TM={faith:"tf",devotional:"td",leadership:"tl",marriage:"tm",grief:"tgr",youth:"ty",sermon:"ts"};
+const CM={faith:"color:#1D4ED8",devotional:"color:#047857",leadership:"color:#B45309",marriage:"color:#6D28D9",grief:"color:#BE123C",youth:"color:#15803D",sermon:"color:#1D4ED8"};
+const S=new Set();
+function R(f){
+  const l=f==="all"?A:A.filter(a=>a.t===f),cards=l.slice(0,4),rows=l.slice(4);
+  document.getElementById("cardGrid").innerHTML=cards.map((a,i)=>`<div class="cd fu" style="animation-delay:${i*.08}s"><div class="cs ${a.c}"></div><div class="cdt"><span class="tg ${TM[a.t]}">${a.t}</span><button class="sv ${S.has(a.id)?'saved':''}" onclick="event.stopPropagation();T(${a.id},this)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 2h10v13l-5-3-5 3V2z"/></svg></button></div><div class="cdtl">${a.title}</div><div class="cdf"><span class="cds">${a.s}</span><span class="cdtm">${a.m} · ${a.a}</span></div></div>`).join("");
+  document.getElementById("moreHead").style.display=rows.length?"flex":"none";
+  document.getElementById("listSection").innerHTML=rows.map((a,i)=>`<div class="lr fu" style="animation-delay:${i*.05}s"><div class="lrn">${cards.length+i+1}</div><div class="lrb"><div class="lrtg" style="${CM[a.t]}">${a.t}</div><div class="lrt">${a.title}</div><div class="lrm">${a.s} · ${a.m} · ${a.a}</div></div></div>`).join("");
+}
+function T(id,btn){S.has(id)?S.delete(id):S.add(id);btn.classList.toggle("saved");}
+document.getElementById("filterBar").addEventListener("click",function(e){const p=e.target.closest(".fp");if(!p)return;this.querySelectorAll(".fp").forEach(x=>x.classList.remove("active"));p.classList.add("active");R(p.dataset.filter);});
+document.getElementById("nlBtn").addEventListener("click",function(){const e=document.getElementById("nlEmail");if(e.value&&e.value.includes("@")){this.textContent="Subscribed!";this.style.background="var(--green)";this.style.color="#fff";e.disabled=true;setTimeout(()=>{this.textContent="Subscribe free";this.style.background="";this.style.color="";e.disabled=false;e.value="";},3000);}});
+document.querySelectorAll(".bnit").forEach(i=>{i.addEventListener("click",function(e){e.preventDefault();document.querySelectorAll(".bnit").forEach(x=>x.classList.remove("active"));this.classList.add("active");});});
+R("all");
+</script>
+</body>
+</html>
