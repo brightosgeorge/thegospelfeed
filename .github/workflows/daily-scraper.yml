@@ -1,0 +1,38 @@
+name: Daily Content Scraper
+
+on:
+  schedule:
+    # Run every day at 6:00 AM UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    # Allow manual trigger from GitHub Actions tab
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r scrapers/requirements.txt
+
+      - name: Run scraper
+        run: |
+          cd scrapers
+          python rss_scraper.py
+
+      - name: Commit and push new feed data
+        run: |
+          git config user.name "Gospel Feed Bot"
+          git config user.email "bot@thegospelfeed.com"
+          git add scrapers/output/
+          git diff --staged --quiet || git commit -m "Daily feed update: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
