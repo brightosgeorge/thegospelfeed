@@ -171,19 +171,19 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   <div class="hm"><div class="ho ho1"></div><div class="ho ho2"></div><div class="ho ho3"></div></div>
   <div class="hero-fade"></div>
   <div class="hi">
-    <div class="ht fi"><div class="hg">Good morning — here's what the Gospel world is reading today</div><div class="hd">Thursday, 30 Apr 2026</div></div>
+    <div class="ht fi"><div class="hg" id="heroGreeting">Good morning — here's what the Gospel world is reading today</div><div class="hd" id="heroDate"></div></div>
     <div class="hgrid">
-      <div class="hfeat fu">
+      <div class="hfeat fu" id="heroFeatured" onclick="openArticle(this)">
         <div class="hfg"></div>
-        <div class="hftp"><div class="hfb">Editor's pick</div><span class="hfs">Desiring God &middot; Sermon</span></div>
-        <div class="hft">When God feels silent: trusting his presence in the darkest seasons of life</div>
+        <div class="hftp"><div class="hfb">Editor's pick</div><span class="hfs" id="heroSource"></span></div>
+        <div class="hft" id="heroTitle">Loading today's top article...</div>
         <div class="hfr"></div>
-        <div class="hfm"><div class="hfa">JP</div><span class="hfn">John Piper</span><span class="hfd"></span><span class="hfdt">8 min read</span><span class="hfd"></span><span class="hfdt">2.4k saves</span></div>
+        <div class="hfm"><div class="hfa" id="heroAvatar"></div><span class="hfn" id="heroAuthor"></span><span class="hfd"></span><span class="hfdt" id="heroReadTime"></span><span class="hfd"></span><span class="hfdt" id="heroTopic"></span></div>
       </div>
-      <div class="hstk">
-        <div class="hsc fu" style="animation-delay:.1s"><div class="hsctg tfa">Faith</div><div class="hsct">How to build a prayer habit that actually sticks in a distracted world</div><div class="hscm">The Gospel Coalition &middot; 5 min</div></div>
-        <div class="hsc fu" style="animation-delay:.2s"><div class="hsctg tdv">Devotional</div><div class="hsct">Morning manna: finding strength in Scripture before the day begins</div><div class="hscm">Christianity Today &middot; 4 min</div></div>
-        <div class="hsc fu" style="animation-delay:.3s"><div class="hsctg tld">Leadership</div><div class="hsct">Servant leadership: what the church taught me about managing teams</div><div class="hscm">Faith &amp; Work &middot; 6 min</div></div>
+      <div class="hstk" id="heroStack">
+        <div class="hsc fu" style="animation-delay:.1s"><div class="hsctg" style="color:rgba(255,255,255,.3)">Loading...</div><div class="hsct" style="color:rgba(255,255,255,.2)">Fetching today's articles</div><div class="hscm"></div></div>
+        <div class="hsc fu" style="animation-delay:.2s"><div class="hsctg" style="color:rgba(255,255,255,.3)">Loading...</div><div class="hsct" style="color:rgba(255,255,255,.2)">Fetching today's articles</div><div class="hscm"></div></div>
+        <div class="hsc fu" style="animation-delay:.3s"><div class="hsctg" style="color:rgba(255,255,255,.3)">Loading...</div><div class="hsct" style="color:rgba(255,255,255,.2)">Fetching today's articles</div><div class="hscm"></div></div>
       </div>
     </div>
   </div>
@@ -198,11 +198,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     <div id="listSection"></div>
   </div>
   <div>
-    <div class="sc"><div class="sch"><span class="scht">Trending this week</span></div><div class="scb" style="padding-top:8px;padding-bottom:8px">
-      <div class="ti"><div class="tin">1</div><div><div class="tit">The power of fasting in a world of noise</div><div class="tim">8.2k reads &middot; Desiring God</div></div></div>
-      <div class="ti"><div class="tin">2</div><div><div class="tit">How to read the Bible in a year — and enjoy it</div><div class="tim">6.1k reads &middot; YouVersion</div></div></div>
-      <div class="ti"><div class="tin">3</div><div><div class="tit">When your church feels like a desert</div><div class="tim">4.8k reads &middot; TGC</div></div></div>
-      <div class="ti"><div class="tin">4</div><div><div class="tit">Grace for the prodigal who comes home again</div><div class="tim">3.5k reads &middot; Crossway</div></div></div>
+    <div class="sc"><div class="sch"><span class="scht">Trending this week</span></div><div class="scb" style="padding-top:8px;padding-bottom:8px" id="trendingList">
+      <div class="ti"><div class="tin">1</div><div><div class="tit">Loading trending articles...</div><div class="tim">...</div></div></div>
     </div></div>
     <div class="spo"><div class="spoi"><svg viewBox="0 0 16 16"><path d="M2 3h12v10H2z"/><path d="M5 3V1.5h6V3"/><path d="M8 6.5v3M6.5 8h3"/></svg></div><div><div class="spol">Sponsor</div><div class="spon">ESV Study Bible</div><div class="spod">Deep study. Beautiful design. Free app.</div></div></div>
     <div class="nl"><div class="nlg"></div><div class="nli"><svg viewBox="0 0 18 18"><rect x="2" y="4" width="14" height="11" rx="2"/><path d="M2 7l7 5 7-5" stroke-linecap="round"/></svg></div><div class="nlt">The Sunday Digest</div><div class="nlsb">The 7 best Christian reads, delivered free every Sunday morning.</div><input class="nlin" type="email" placeholder="your@email.com" id="nlEmail"><button class="nlbn" id="nlBtn">Subscribe free</button><div class="nltr">Join 12,000+ believers worldwide</div></div>
@@ -225,34 +222,187 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   <a class="bnit" href="#"><svg viewBox="0 0 20 20"><circle cx="10" cy="6" r="3"/><path d="M3 18c0-4 3-7 7-7s7 3 7 7"/></svg><span>Profile</span></a>
 </div></div>
 <script>
-const A=[
-{id:1,t:"marriage",title:"Forgiveness as a daily practice: keeping your marriage rooted in grace",s:"Focus on the Family",m:"5 min",a:"3h ago",c:"sp"},
-{id:2,t:"devotional",title:"A 5-minute devotional for the overwhelmed parent who can't find time",s:"Her.meneutics",m:"5 min",a:"4h ago",c:"sg"},
-{id:3,t:"faith",title:"Why doubt is not the opposite of faith — it's part of the journey",s:"Relevant Magazine",m:"5 min",a:"2h ago",c:"sb"},
-{id:4,t:"youth",title:"Talking to Gen Z about faith without sounding out of touch",s:"YouVersion",m:"6 min",a:"5h ago",c:"stl"},
-{id:5,t:"grief",title:"What the Psalms say about crying out to God in unimaginable pain",s:"Bible Project",m:"7 min",a:"1h ago",c:"sr"},
-{id:6,t:"faith",title:"The theology of rest: what Sabbath really means in a hustle culture",s:"Crossway",m:"6 min",a:"3h ago",c:"sb"},
-{id:7,t:"leadership",title:"Pastoring through burnout: lessons from Elijah under the broom tree",s:"9Marks",m:"8 min",a:"6h ago",c:"sa"},
-{id:8,t:"devotional",title:"Evening prayers: how to close your day anchored in Scripture",s:"Praying Through",m:"4 min",a:"7h ago",c:"sg"},
-{id:9,t:"sermon",title:"Tim Keller on the radical generosity of the early church",s:"Gospel in Life",m:"12 min",a:"8h ago",c:"sb"},
-{id:10,t:"marriage",title:"How to fight fair: conflict resolution rooted in Ephesians 4",s:"FamilyLife",m:"6 min",a:"9h ago",c:"sp"},
-{id:11,t:"faith",title:"Why community matters more than personal quiet time (hear me out)",s:"The Gospel Coalition",m:"7 min",a:"5h ago",c:"sb"},
-{id:12,t:"grief",title:"Walking with friends through loss: what not to say and what helps",s:"Christianity Today",m:"5 min",a:"4h ago",c:"sr"},
-];
+// ─── Config ───
+const FEED_URL = "scrapers/output/feed.json";
 const TM={faith:"tf",devotional:"td",leadership:"tl",marriage:"tm",grief:"tgr",youth:"ty",sermon:"ts"};
 const CM={faith:"color:#1D4ED8",devotional:"color:#047857",leadership:"color:#B45309",marriage:"color:#6D28D9",grief:"color:#BE123C",youth:"color:#15803D",sermon:"color:#1D4ED8"};
+const SM={faith:"sb",devotional:"sg",leadership:"sa",marriage:"sp",grief:"sr",youth:"stl",sermon:"sb"};
+const HTAGS={faith:"tfa",devotional:"tdv",leadership:"tld",marriage:"tfa",grief:"tfa",youth:"tfa",sermon:"tfa"};
 const S=new Set();
-function R(f){
-  const l=f==="all"?A:A.filter(a=>a.t===f),cards=l.slice(0,4),rows=l.slice(4);
-  document.getElementById("cardGrid").innerHTML=cards.map((a,i)=>`<div class="cd fu" style="animation-delay:${i*.08}s"><div class="cs ${a.c}"></div><div class="cdt"><span class="tg ${TM[a.t]}">${a.t}</span><button class="sv ${S.has(a.id)?'saved':''}" onclick="event.stopPropagation();T(${a.id},this)"><svg viewBox="0 0 16 16" fill="none"><path d="M3 2h10v13l-5-3-5 3V2z"/></svg></button></div><div class="cdtl">${a.title}</div><div class="cdf"><span class="cds">${a.s}</span><span class="cdtm">${a.m} · ${a.a}</span></div></div>`).join("");
-  document.getElementById("moreHead").style.display=rows.length?"flex":"none";
-  document.getElementById("listSection").innerHTML=rows.map((a,i)=>`<div class="lr fu" style="animation-delay:${i*.05}s"><div class="lrn">${cards.length+i+1}</div><div class="lrb"><div class="lrtg" style="${CM[a.t]}">${a.t}</div><div class="lrt">${a.title}</div><div class="lrm">${a.s} · ${a.m} · ${a.a}</div></div></div>`).join("");
+let ALL_ARTICLES=[];
+
+// ─── Format date ───
+function formatDate(){
+  const d=new Date();
+  const days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
+
+// ─── Get greeting ───
+function getGreeting(){
+  const h=new Date().getHours();
+  if(h<12) return "Good morning";
+  if(h<17) return "Good afternoon";
+  return "Good evening";
+}
+
+// ─── Get initials ───
+function getInitials(name){
+  if(!name) return "TG";
+  const parts=name.trim().split(/\s+/);
+  if(parts.length>=2) return (parts[0][0]+parts[1][0]).toUpperCase();
+  return name.substring(0,2).toUpperCase();
+}
+
+// ─── Open article in new tab ───
+function openArticle(el){
+  const url=el.getAttribute("data-url");
+  if(url) window.open(url,"_blank");
+}
+
+// ─── Populate hero section ───
+function populateHero(articles){
+  // Date and greeting
+  document.getElementById("heroDate").textContent=formatDate();
+  document.getElementById("heroGreeting").textContent=`${getGreeting()} — here's what the Gospel world is reading today`;
+
+  // Editor's pick (first article, or the one flagged)
+  const pick=articles.find(a=>a.is_editors_pick)||articles[0];
+  if(pick){
+    document.getElementById("heroFeatured").setAttribute("data-url",pick.url);
+    document.getElementById("heroSource").textContent=`${pick.source_name} · ${pick.topic}`;
+    document.getElementById("heroTitle").textContent=pick.title;
+    document.getElementById("heroAvatar").textContent=getInitials(pick.author);
+    document.getElementById("heroAuthor").textContent=pick.author;
+    document.getElementById("heroReadTime").textContent=pick.read_time+" read";
+    document.getElementById("heroTopic").textContent=pick.topic;
+  }
+
+  // Side stack (next 3 articles after pick, try different topics)
+  const stack=articles.filter(a=>a.id!==pick.id).slice(0,3);
+  const stackEl=document.getElementById("heroStack");
+  stackEl.innerHTML=stack.map((a,i)=>`
+    <div class="hsc fu" style="animation-delay:${(i+1)*0.1}s;cursor:pointer" onclick="window.open('${a.url}','_blank')">
+      <div class="hsctg ${HTAGS[a.topic]||'tfa'}">${a.topic}</div>
+      <div class="hsct">${a.title}</div>
+      <div class="hscm">${a.source_name} · ${a.read_time}</div>
+    </div>
+  `).join("");
+}
+
+// ─── Populate trending sidebar ───
+function populateTrending(articles){
+  const top4=articles.slice(0,4);
+  const el=document.getElementById("trendingList");
+  el.innerHTML=top4.map((a,i)=>`
+    <div class="ti" onclick="window.open('${a.url}','_blank')">
+      <div class="tin">${i+1}</div>
+      <div>
+        <div class="tit">${a.title}</div>
+        <div class="tim">Score ${a.score} · ${a.source_name}</div>
+      </div>
+    </div>
+  `).join("");
+}
+
+// ─── Render article cards and list ───
+function R(f){
+  const l=f==="all"?ALL_ARTICLES:ALL_ARTICLES.filter(a=>a.topic===f);
+
+  // Update article count
+  const countEl=document.querySelector(".sha");
+  if(countEl) countEl.textContent=`${l.length} articles →`;
+
+  const cards=l.slice(0,4),rows=l.slice(4);
+  document.getElementById("cardGrid").innerHTML=cards.map((a,i)=>`
+    <div class="cd fu" style="animation-delay:${i*.08}s;cursor:pointer" onclick="window.open('${a.url}','_blank')">
+      <div class="cs ${SM[a.topic]||'sb'}"></div>
+      <div class="cdt">
+        <span class="tg ${TM[a.topic]||'tf'}">${a.topic}</span>
+        <button class="sv ${S.has(a.id)?'saved':''}" onclick="event.stopPropagation();T('${a.id}',this)">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 2h10v13l-5-3-5 3V2z"/></svg>
+        </button>
+      </div>
+      <div class="cdtl">${a.title}</div>
+      <div class="cdf">
+        <span class="cds">${a.source_name}</span>
+        <span class="cdtm">${a.read_time} · ${a.time_ago||'today'}</span>
+      </div>
+    </div>
+  `).join("");
+
+  document.getElementById("moreHead").style.display=rows.length?"flex":"none";
+  document.getElementById("listSection").innerHTML=rows.map((a,i)=>`
+    <div class="lr fu" style="animation-delay:${i*.05}s;cursor:pointer" onclick="window.open('${a.url}','_blank')">
+      <div class="lrn">${cards.length+i+1}</div>
+      <div class="lrb">
+        <div class="lrtg" style="${CM[a.topic]||'color:#1D4ED8'}">${a.topic}</div>
+        <div class="lrt">${a.title}</div>
+        <div class="lrm">${a.source_name} · ${a.read_time} · ${a.time_ago||'today'}</div>
+      </div>
+    </div>
+  `).join("");
+}
+
 function T(id,btn){S.has(id)?S.delete(id):S.add(id);btn.classList.toggle("saved");}
-document.getElementById("filterBar").addEventListener("click",function(e){const p=e.target.closest(".fp");if(!p)return;this.querySelectorAll(".fp").forEach(x=>x.classList.remove("active"));p.classList.add("active");R(p.dataset.filter);});
-document.getElementById("nlBtn").addEventListener("click",function(){const e=document.getElementById("nlEmail");if(e.value&&e.value.includes("@")){this.textContent="Subscribed!";this.style.background="var(--green)";this.style.color="#fff";e.disabled=true;setTimeout(()=>{this.textContent="Subscribe free";this.style.background="";this.style.color="";e.disabled=false;e.value="";},3000);}});
-document.querySelectorAll(".bnit").forEach(i=>{i.addEventListener("click",function(e){e.preventDefault();document.querySelectorAll(".bnit").forEach(x=>x.classList.remove("active"));this.classList.add("active");});});
-R("all");
+
+// ─── Filter bar ───
+document.getElementById("filterBar").addEventListener("click",function(e){
+  const p=e.target.closest(".fp");if(!p)return;
+  this.querySelectorAll(".fp").forEach(x=>x.classList.remove("active"));
+  p.classList.add("active");
+  R(p.dataset.filter);
+});
+
+// ─── Newsletter ───
+document.getElementById("nlBtn").addEventListener("click",function(){
+  const e=document.getElementById("nlEmail");
+  if(e.value&&e.value.includes("@")){
+    this.textContent="Subscribed!";this.style.background="var(--green)";this.style.color="#fff";e.disabled=true;
+    setTimeout(()=>{this.textContent="Subscribe free";this.style.background="";this.style.color="";e.disabled=false;e.value="";},3000);
+  }
+});
+
+// ─── Bottom nav ───
+document.querySelectorAll(".bnit").forEach(i=>{
+  i.addEventListener("click",function(e){e.preventDefault();
+    document.querySelectorAll(".bnit").forEach(x=>x.classList.remove("active"));
+    this.classList.add("active");
+  });
+});
+
+// ─── Fetch feed and initialize ───
+async function init(){
+  try{
+    const resp=await fetch(FEED_URL);
+    if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data=await resp.json();
+
+    // Only show articles that are marked as live
+    ALL_ARTICLES=data.articles.filter(a=>a.is_live!==false);
+
+    console.log(`Loaded ${ALL_ARTICLES.length} articles from feed.json`);
+
+    // Populate all sections
+    populateHero(ALL_ARTICLES);
+    populateTrending(ALL_ARTICLES);
+    R("all");
+
+  }catch(err){
+    console.warn("Could not load feed.json, using fallback:",err.message);
+    // Fallback: show a helpful message
+    document.getElementById("heroTitle").textContent="Welcome to The Gospel Feed";
+    document.getElementById("heroSource").textContent="Your daily curated Christian content";
+    document.getElementById("heroAuthor").textContent="Run the scraper to populate";
+    document.getElementById("heroAvatar").textContent="TG";
+    document.getElementById("heroReadTime").textContent="";
+    document.getElementById("heroTopic").textContent="";
+    document.getElementById("heroDate").textContent=formatDate();
+  }
+}
+
+init();
 </script>
 </body>
 </html>
