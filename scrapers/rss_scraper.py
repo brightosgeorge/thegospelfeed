@@ -15,6 +15,8 @@ import json
 import hashlib
 import re
 import os
+import urllib.request
+import ssl
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
@@ -30,8 +32,11 @@ from scorer import score_article, estimate_read_time
 SOURCES_FILE = Path(__file__).parent / "sources.yaml"
 OUTPUT_FILE = Path(__file__).parent / "output" / "feed.json"
 SEEN_FILE = Path(__file__).parent / "output" / "seen_urls.json"
-MAX_AGE_HOURS = 48  # Only include articles from the last 48 hours
-MIN_SCORE = 30      # Minimum quality score to include
+MAX_AGE_HOURS = 72  # Include articles from the last 72 hours (3 days)
+MIN_SCORE = 25      # Minimum quality score to include
+
+# User-Agent string to identify as a real application (prevents 403 blocks)
+USER_AGENT = "TheGospelFeed/1.0 (+https://thegospelfeed.com) Content Aggregator"
 
 
 def load_sources() -> dict:
@@ -52,7 +57,6 @@ def load_seen_urls() -> set:
 def save_seen_urls(urls: set):
     """Save seen URLs for future deduplication."""
     SEEN_FILE.parent.mkdir(parents=True, exist_ok=True)
-    # Only keep URLs from last 7 days to prevent file bloat
     with open(SEEN_FILE, "w") as f:
         json.dump({"urls": list(urls), "updated": datetime.now(timezone.utc).isoformat()}, f)
 
@@ -66,22 +70,15 @@ def clean_html(text: str) -> str:
     """Strip HTML tags and clean up whitespace."""
     if not text:
         return ""
-    # Remove HTML tags
     clean = re.sub(r'<[^>]+>', '', text)
-    # Remove extra whitespace
     clean = re.sub(r'\s+', ' ', clean).strip()
-    # Truncate to reasonable summary length
     if len(clean) > 300:
         clean = clean[:297] + "..."
     return clean
 
 
 def parse_date(entry) -> datetime:
-    """
-    Extract publication date from a feed entry.
-    Handles various date formats that RSS feeds use.
-    """
-    # Try parsed date tuple first
+    """Extract publication date from a feed entry."""
     for field in ['published_parsed', 'updated_parsed']:
         parsed = entry.get(field)
         if parsed:
@@ -91,11 +88,9 @@ def parse_date(entry) -> datetime:
             except (ValueError, OverflowError, OSError):
                 continue
 
-    # Try string date fields
     for field in ['published', 'updated']:
         date_str = entry.get(field, '')
         if date_str:
-            # Try common formats
             for fmt in [
                 '%a, %d %b %Y %H:%M:%S %z',
                 '%a, %d %b %Y %H:%M:%S %Z',
@@ -111,19 +106,28 @@ def parse_date(entry) -> datetime:
                 except ValueError:
                     continue
 
-    # Fallback: assume it was published now
     return datetime.now(timezone.utc)
+
+
+def fetch_feed_with_headers(url: str) -> str:
+    """
+    Fetch an RSS feed URL with proper headers to avoid 403 blocks.
+    Returns the raw XML/text content of the feed.
+    """
+    ctx = ssl.create_default_context()
+    req = urllib.request.Request(url, headers={
+        'User-Agent': USER_AGENT,
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+    })
+    resp = urllib.request.urlopen(req, context=ctx, timeout=15)
+    return resp.read()
 
 
 def fetch_rss_source(source: dict) -> list:
     """
     Fetch and parse articles from a single RSS source.
-
-    Args:
-        source: Dict with name, url, trust_tier, default_topic
-
-    Returns:
-        List of normalized article dicts
+    Uses custom headers to prevent 403 Forbidden errors.
     """
     articles = []
     name = source["name"]
@@ -134,46 +138,39 @@ def fetch_rss_source(source: dict) -> list:
     print(f"  Fetching: {name}...")
 
     try:
-        feed = feedparser.parse(url)
+        # Fetch with proper User-Agent header
+        raw_content = fetch_feed_with_headers(url)
+        feed = feedparser.parse(raw_content)
 
         if feed.bozo and not feed.entries:
-            print(f"  ⚠ Warning: {name} — feed error: {feed.bozo_exception}")
+            print(f"  ⚠ Warning: {name} — feed parse error: {feed.bozo_exception}")
             return []
 
         cutoff = datetime.now(timezone.utc) - timedelta(hours=MAX_AGE_HOURS)
 
         for entry in feed.entries:
             try:
-                # Extract core fields
                 title = entry.get("title", "").strip()
                 link = entry.get("link", "").strip()
                 summary = clean_html(entry.get("summary", entry.get("description", "")))
                 author = entry.get("author", "").strip()
                 published = parse_date(entry)
 
-                # Skip if missing essential fields
                 if not title or not link:
                     continue
 
-                # Skip if too old
                 if published < cutoff:
                     continue
 
-                # Auto-tag the topic
                 topic = tag_topic(title, summary, default_topic)
-
-                # Score the article
                 score = score_article(
                     title=title,
                     summary=summary,
                     published_at=published,
                     trust_tier=trust_tier,
                 )
-
-                # Estimate read time from summary length (rough proxy)
                 read_time = estimate_read_time(summary) if summary else "3 min"
 
-                # Build the article object
                 article = {
                     "id": generate_id(link),
                     "title": title,
@@ -199,17 +196,18 @@ def fetch_rss_source(source: dict) -> list:
 
         print(f"  ✓ {name}: {len(articles)} articles found")
 
+    except urllib.error.HTTPError as e:
+        print(f"  ✗ {name}: HTTP {e.code} — {e.reason}")
+    except urllib.error.URLError as e:
+        print(f"  ✗ {name}: Connection failed — {e.reason}")
     except Exception as e:
-        print(f"  ✗ Error fetching {name}: {e}")
+        print(f"  ✗ {name}: Error — {e}")
 
     return articles
 
 
 def deduplicate(articles: list, seen_urls: set) -> list:
-    """
-    Remove duplicate articles by URL.
-    Also removes articles we've seen in previous runs.
-    """
+    """Remove duplicate articles by URL."""
     unique = []
     current_urls = set()
 
@@ -223,28 +221,21 @@ def deduplicate(articles: list, seen_urls: set) -> list:
 
 
 def select_editors_pick(articles: list) -> list:
-    """
-    Mark the highest-scoring article as editor's pick.
-    Prefers articles from tier-1 sources in case of ties.
-    """
+    """Mark the highest-scoring article as editor's pick."""
     if not articles:
         return articles
 
-    # Sort by score descending, then by trust tier ascending (1 is best)
     sorted_articles = sorted(
         articles,
         key=lambda a: (a["score"], -a["trust_tier"]),
         reverse=True
     )
-
-    # Mark the top article
     sorted_articles[0]["is_editors_pick"] = True
-
     return sorted_articles
 
 
 def calculate_time_ago(published_at: str) -> str:
-    """Convert an ISO timestamp to a human-readable 'X hours ago' string."""
+    """Convert an ISO timestamp to a human-readable time ago string."""
     try:
         pub = datetime.fromisoformat(published_at)
         now = datetime.now(timezone.utc)
@@ -270,7 +261,7 @@ def run_scraper():
     """
     Main scraper pipeline:
     1. Load sources
-    2. Fetch all RSS feeds
+    2. Fetch all RSS feeds with proper headers
     3. Deduplicate
     4. Sort by score
     5. Select editor's pick
@@ -281,51 +272,49 @@ def run_scraper():
     print(f"Run time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}")
     print("=" * 50)
 
-    # Load config and previous state
     sources = load_sources()
     seen_urls = load_seen_urls()
 
-    # Fetch from all RSS sources
     all_articles = []
     rss_sources = sources.get("sources", {}).get("rss", [])
+    success_count = 0
+    fail_count = 0
 
     print(f"\nFetching from {len(rss_sources)} RSS sources...\n")
 
     for source in rss_sources:
         articles = fetch_rss_source(source)
+        if articles:
+            success_count += 1
+        else:
+            fail_count += 1
         all_articles.extend(articles)
 
-    print(f"\nTotal raw articles: {len(all_articles)}")
+    print(f"\nSources: {success_count} succeeded, {fail_count} failed")
+    print(f"Total raw articles: {len(all_articles)}")
 
-    # Deduplicate
     unique_articles = deduplicate(all_articles, seen_urls)
     print(f"After deduplication: {len(unique_articles)}")
 
-    # Filter by minimum score
     quality_articles = [a for a in unique_articles if a["is_live"]]
     print(f"After quality filter (score >= {MIN_SCORE}): {len(quality_articles)}")
 
-    # Sort by score descending
     quality_articles.sort(key=lambda a: a["score"], reverse=True)
-
-    # Select editor's pick
     quality_articles = select_editors_pick(quality_articles)
 
-    # Add time_ago field for display
     for article in quality_articles:
         article["time_ago"] = calculate_time_ago(article["published_at"])
 
-    # Update seen URLs
     new_seen = seen_urls | {a["url"] for a in all_articles}
     save_seen_urls(new_seen)
 
-    # Save output
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "total_articles": len(quality_articles),
-        "sources_fetched": len(rss_sources),
+        "sources_fetched": success_count,
+        "sources_failed": fail_count,
         "editors_pick": next((a for a in quality_articles if a["is_editors_pick"]), None),
         "articles": quality_articles,
     }
@@ -335,14 +324,12 @@ def run_scraper():
 
     print(f"\n✓ Saved {len(quality_articles)} articles to {OUTPUT_FILE}")
 
-    # Print summary
     if quality_articles:
         pick = next((a for a in quality_articles if a["is_editors_pick"]), None)
         if pick:
             print(f"\n★ Editor's Pick: \"{pick['title']}\"")
             print(f"  Source: {pick['source_name']} | Score: {pick['score']} | Topic: {pick['topic']}")
 
-        # Topic breakdown
         topics = {}
         for a in quality_articles:
             topics[a["topic"]] = topics.get(a["topic"], 0) + 1
@@ -358,8 +345,6 @@ def run_scraper():
     return output
 
 
-# ─── Lambda handler ───
-
 def lambda_handler(event, context):
     """AWS Lambda entry point."""
     result = run_scraper()
@@ -372,8 +357,6 @@ def lambda_handler(event, context):
         })
     }
 
-
-# ─── Local execution ───
 
 if __name__ == "__main__":
     run_scraper()
