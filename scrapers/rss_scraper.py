@@ -47,19 +47,20 @@ def load_sources() -> dict:
 
 
 def load_seen_urls() -> set:
-    """Load previously seen URLs to deduplicate across runs."""
-    if SEEN_FILE.exists():
-        with open(SEEN_FILE, "r") as f:
-            data = json.load(f)
-            return set(data.get("urls", []))
+    """
+    Load previously seen URLs.
+    Note: We only use this to avoid duplicate entries within the feed,
+    NOT to skip articles across runs. Articles should appear in the feed
+    as long as they're within the MAX_AGE_HOURS window.
+    """
     return set()
 
 
 def save_seen_urls(urls: set):
-    """Save seen URLs for future deduplication."""
+    """Save seen URLs (kept for future use with DynamoDB)."""
     SEEN_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(SEEN_FILE, "w") as f:
-        json.dump({"urls": list(urls), "updated": datetime.now(timezone.utc).isoformat()}, f)
+        json.dump({"urls": list(urls)[-500:], "updated": datetime.now(timezone.utc).isoformat()}, f)
 
 
 def generate_id(url: str) -> str:
