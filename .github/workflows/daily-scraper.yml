@@ -32,6 +32,8 @@ jobs:
           pip install -r scrapers/requirements.txt
 
       - name: Run scraper
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: |
           cd scrapers
           python rss_scraper.py

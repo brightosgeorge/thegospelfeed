@@ -25,6 +25,7 @@ import yaml
 
 from tagger import tag_topic
 from scorer import score_article, estimate_read_time
+from youtube_scraper import fetch_all_youtube
 
 
 # ─── Configuration ───
@@ -291,7 +292,13 @@ def run_scraper():
         all_articles.extend(articles)
 
     print(f"\nSources: {success_count} succeeded, {fail_count} failed")
-    print(f"Total raw articles: {len(all_articles)}")
+    print(f"Total RSS articles: {len(all_articles)}")
+
+    # Fetch from YouTube channels
+    youtube_articles = fetch_all_youtube(sources)
+    all_articles.extend(youtube_articles)
+
+    print(f"Total articles (RSS + YouTube): {len(all_articles)}")
 
     unique_articles = deduplicate(all_articles, seen_urls)
     print(f"After deduplication: {len(unique_articles)}")
