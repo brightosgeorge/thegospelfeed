@@ -208,8 +208,8 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <footer class="ft">
   <div class="fti">
     <div><div class="ftl"><div class="ftlm"><svg viewBox="0 0 18 18"><path d="M9 2v14M5 6h8"/><circle cx="9" cy="9" r="6" opacity="0.3"/></svg></div><div class="ftlt">The<span>Gospel</span>Feed</div></div><p class="ftd">Your daily feed of the best sermons, devotionals, and Christian content from across the web. Curated for believers, by believers.</p></div>
-    <div><div class="ftct">Browse</div><a class="ftlk" href="#">Today's Feed</a><a class="ftlk" href="#">Topics</a><a class="ftlk" href="#">Sermons</a><a class="ftlk" href="#">Devotionals</a><a class="ftlk" href="#">Newsletter</a></div>
-    <div><div class="ftct">Topics</div><a class="ftlk" href="#">Faith</a><a class="ftlk" href="#">Marriage</a><a class="ftlk" href="#">Leadership</a><a class="ftlk" href="#">Grief</a><a class="ftlk" href="#">Youth</a></div>
+    <div><div class="ftct">Browse</div><a class="ftlk" href="#filterBar" onclick="activateFilter('all')">Today's Feed</a><a class="ftlk" href="#filterBar" onclick="activateFilter('all')">Topics</a><a class="ftlk" href="#filterBar" onclick="activateFilter('sermon')">Sermons</a><a class="ftlk" href="#filterBar" onclick="activateFilter('devotional')">Devotionals</a><a class="ftlk" href="#" onclick="document.getElementById('nlEmail').focus();return false;">Newsletter</a></div>
+    <div><div class="ftct">Topics</div><a class="ftlk" href="#filterBar" onclick="activateFilter('faith')">Faith</a><a class="ftlk" href="#filterBar" onclick="activateFilter('marriage')">Marriage</a><a class="ftlk" href="#filterBar" onclick="activateFilter('leadership')">Leadership</a><a class="ftlk" href="#filterBar" onclick="activateFilter('grief')">Grief</a><a class="ftlk" href="#filterBar" onclick="activateFilter('youth')">Youth</a></div>
     <div><div class="ftct">About</div><a class="ftlk" href="#">Our Mission</a><a class="ftlk" href="#">Sources</a><a class="ftlk" href="#">Advertise</a><a class="ftlk" href="#">Contact</a><a class="ftlk" href="#">Privacy</a></div>
   </div>
   <div class="ftb"><span class="ftc">&copy; 2026 The Gospel Feed. All rights reserved.</span><span class="ftc">Made with faith &middot; Lagos, Nigeria</span></div>
@@ -346,6 +346,16 @@ function R(f){
 }
 
 function T(id,btn){S.has(id)?S.delete(id):S.add(id);btn.classList.toggle("saved");}
+
+// ─── Activate filter from footer links ───
+function activateFilter(topic){
+  const bar=document.getElementById("filterBar");
+  bar.querySelectorAll(".fp").forEach(p=>{
+    p.classList.remove("active");
+    if(p.dataset.filter===topic) p.classList.add("active");
+  });
+  R(topic);
+}
 
 // ─── Filter bar ───
 document.getElementById("filterBar").addEventListener("click",function(e){
