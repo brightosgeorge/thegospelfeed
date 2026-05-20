@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — The Gospel Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0A1628;--navy-2:#0E1D33;--navy-3:#12243E;--gold:#D4AF37;--gold-light:#F0D675;--gold-dim:rgba(212,175,55,0.12);--gold-faint:rgba(212,175,55,0.05);--cream:#FDFBF7;--warm:#F8F5EF;--card:rgba(255,255,255,0.82);--cborder:rgba(0,0,0,0.06);--t1:#1A1814;--t2:#4A453E;--t3:#8A8480;--t4:#B5B0AB;--blue:#3B82F6;--green:#10B981;--amber:#F59E0B;--purple:#8B5CF6;--rose:#F43F5E;--teal:#14B8A6;--serif:'Fraunces',Georgia,serif;--sans:'Outfit',-apple-system,sans-serif;--r:clamp(10px,1.2vw,16px);--rl:clamp(14px,1.6vw,24px)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:clamp(15px,1vw+12px,18px)}
+body{font-family:var(--sans);background:var(--cream);color:var(--t1);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+@keyframes orb-move{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.1)}66%{transform:translate(-15px,10px) scale(0.95)}}
+@keyframes fade-up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+.fu{opacity:0;animation:fade-up .7s cubic-bezier(.22,1,.36,1) forwards}
+.fi{opacity:0;animation:fade-in .6s ease forwards}
+body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");opacity:.5}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:100;background:rgba(10,22,40,.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);padding:0 clamp(16px,4vw,48px);display:flex;align-items:center;justify-content:space-between;height:clamp(56px,7vw,72px);border-bottom:.5px solid rgba(212,175,55,.1)}
+.nav-logo{display:flex;align-items:center;gap:clamp(8px,1vw,12px);text-decoration:none}
+.lm{width:clamp(30px,3.5vw,40px);height:clamp(30px,3.5vw,40px);background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:clamp(6px,.8vw,10px);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(212,175,55,.3);transition:transform .3s,box-shadow .3s}
+.nav-logo:hover .lm{transform:rotate(6deg) scale(1.08);box-shadow:0 4px 20px rgba(212,175,55,.5)}
+.lm svg{width:55%;height:55%;stroke:var(--navy);fill:none;stroke-width:2.2}
+.lt{font-size:clamp(14px,1.5vw,18px);font-weight:500;color:#fff;letter-spacing:-.01em}
+.lt span{color:var(--gold-light);font-weight:600}
+.nls{display:flex;gap:clamp(16px,2.5vw,32px)}
+.nls a{font-size:clamp(12px,.85rem,14px);color:rgba(255,255,255,.45);text-decoration:none;font-weight:400;transition:color .25s;position:relative}
+.nls a:hover{color:var(--gold-light)}
+.nr{display:flex;align-items:center;gap:clamp(8px,1vw,14px)}
+.nc{font-family:var(--sans);font-size:clamp(11px,.8rem,13px);font-weight:500;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);border:none;padding:clamp(6px,.8vw,10px) clamp(14px,2vw,24px);border-radius:50px;cursor:pointer;transition:all .25s;box-shadow:0 2px 12px rgba(212,175,55,.25)}
+.nc:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(212,175,55,.4)}
+.mt{display:none;width:36px;height:36px;border-radius:50%;border:.5px solid rgba(255,255,255,.1);background:0 0;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.mt span{display:block;width:16px;height:1.5px;background:rgba(255,255,255,.6);border-radius:1px}
+
+/* Hero */
+.about-hero{background:var(--navy);padding:clamp(48px,8vw,100px) clamp(16px,4vw,48px) clamp(40px,6vw,80px);position:relative;overflow:hidden;text-align:center}
+.about-hero .hm{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ho{position:absolute;border-radius:50%;filter:blur(80px);animation:orb-move 12s ease-in-out infinite}
+.ho1{width:clamp(300px,40vw,600px);height:clamp(300px,40vw,600px);top:-20%;right:-10%;background:rgba(212,175,55,.08)}
+.ho2{width:clamp(200px,30vw,450px);height:clamp(200px,30vw,450px);bottom:-15%;left:-5%;background:rgba(59,130,246,.06);animation-delay:-4s}
+.hero-fade{position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to bottom,transparent,var(--cream));pointer-events:none;z-index:2}
+.about-hero-inner{position:relative;z-index:1;max-width:720px;margin:0 auto}
+.about-eyebrow{font-size:clamp(10px,.65rem,12px);font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:clamp(12px,2vw,20px)}
+.about-title{font-family:var(--serif);font-size:clamp(28px,4vw,48px);font-weight:400;color:#fff;line-height:1.25;margin-bottom:clamp(16px,2.5vw,24px);letter-spacing:-.02em}
+.about-subtitle{font-size:clamp(14px,1rem,18px);color:rgba(255,255,255,.45);line-height:1.7;max-width:560px;margin:0 auto;font-weight:300}
+
+/* Content */
+.about-content{max-width:800px;margin:0 auto;padding:clamp(32px,5vw,64px) clamp(16px,4vw,48px)}
+
+.section{margin-bottom:clamp(40px,5vw,64px)}
+.section-label{font-size:clamp(10px,.65rem,12px);font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:clamp(10px,1.5vw,16px)}
+.section-heading{font-family:var(--serif);font-size:clamp(22px,2.5vw,32px);font-weight:400;color:var(--t1);line-height:1.35;margin-bottom:clamp(14px,2vw,20px);letter-spacing:-.01em}
+.section-text{font-size:clamp(14px,.95rem,17px);color:var(--t2);line-height:1.8;margin-bottom:clamp(14px,2vw,20px)}
+.section-text:last-child{margin-bottom:0}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,20px);margin-bottom:clamp(40px,5vw,64px)}
+.stat{background:var(--card);backdrop-filter:blur(8px);border:.5px solid var(--cborder);border-radius:var(--rl);padding:clamp(20px,2.5vw,32px);text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.stat-num{font-family:var(--serif);font-size:clamp(28px,3vw,42px);font-weight:400;color:var(--navy);margin-bottom:4px}
+.stat-label{font-size:clamp(11px,.7rem,13px);color:var(--t3);font-weight:500}
+
+/* Values */
+.values{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(12px,2vw,16px);margin-top:clamp(20px,3vw,32px)}
+.value-card{background:var(--card);backdrop-filter:blur(8px);border:.5px solid var(--cborder);border-radius:var(--rl);padding:clamp(20px,2.5vw,28px);box-shadow:0 1px 3px rgba(0,0,0,.04);transition:all .3s cubic-bezier(.22,1,.36,1)}
+.value-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.06)}
+.value-icon{width:clamp(40px,4.5vw,52px);height:clamp(40px,4.5vw,52px);border-radius:var(--r);display:flex;align-items:center;justify-content:center;margin-bottom:clamp(12px,1.5vw,16px)}
+.value-icon svg{width:50%;height:50%;stroke-width:1.5;fill:none}
+.vi-gold{background:var(--gold-dim)}.vi-gold svg{stroke:var(--gold)}
+.vi-blue{background:rgba(59,130,246,.1)}.vi-blue svg{stroke:var(--blue)}
+.vi-green{background:rgba(16,185,129,.1)}.vi-green svg{stroke:var(--green)}
+.vi-purple{background:rgba(139,92,246,.1)}.vi-purple svg{stroke:var(--purple)}
+.value-title{font-size:clamp(14px,1rem,17px);font-weight:500;margin-bottom:6px}
+.value-desc{font-size:clamp(12px,.8rem,14px);color:var(--t3);line-height:1.6}
+
+/* Sources */
+.source-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(140px,18vw,180px),1fr));gap:clamp(8px,1.2vw,12px);margin-top:clamp(16px,2vw,24px)}
+.source-pill{background:var(--card);border:.5px solid var(--cborder);border-radius:var(--r);padding:clamp(12px,1.5vw,16px) clamp(14px,1.8vw,18px);font-size:clamp(12px,.8rem,14px);font-weight:500;color:var(--t2);text-align:center;transition:all .25s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.source-pill:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+.source-tier{font-size:clamp(9px,.55rem,10px);color:var(--t4);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+
+/* CTA */
+.cta-card{background:var(--navy);border-radius:var(--rl);padding:clamp(28px,4vw,48px);text-align:center;position:relative;overflow:hidden;margin-top:clamp(20px,3vw,32px)}
+.cta-glow{position:absolute;top:-40px;right:-30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.1) 0%,transparent 70%);pointer-events:none}
+.cta-glow2{position:absolute;bottom:-50px;left:-20px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.06) 0%,transparent 70%);pointer-events:none}
+.cta-title{font-family:var(--serif);font-size:clamp(20px,2.5vw,30px);font-weight:400;color:#fff;margin-bottom:clamp(8px,1.2vw,14px);position:relative;z-index:1}
+.cta-sub{font-size:clamp(13px,.85rem,16px);color:rgba(255,255,255,.4);margin-bottom:clamp(20px,3vw,28px);position:relative;z-index:1;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.6}
+.cta-btn{font-family:var(--sans);font-size:clamp(13px,.85rem,15px);font-weight:600;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--navy);border:none;padding:clamp(12px,1.5vw,16px) clamp(28px,3.5vw,40px);border-radius:50px;cursor:pointer;transition:all .25s;box-shadow:0 2px 16px rgba(212,175,55,.3);position:relative;z-index:1;text-decoration:none;display:inline-block}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(212,175,55,.45)}
+
+/* Divider */
+.divider{border:none;border-top:.5px solid var(--cborder);margin:clamp(32px,4vw,48px) 0}
+
+/* Contact */
+.contact-row{display:flex;gap:clamp(12px,2vw,16px);flex-wrap:wrap;margin-top:clamp(16px,2vw,24px)}
+.contact-link{display:flex;align-items:center;gap:8px;background:var(--card);border:.5px solid var(--cborder);border-radius:50px;padding:clamp(8px,1vw,12px) clamp(16px,2vw,22px);font-size:clamp(12px,.8rem,14px);color:var(--t2);text-decoration:none;font-weight:500;transition:all .25s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.contact-link:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+.contact-link svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5}
+
+/* Footer */
+.ft{background:var(--navy);padding:clamp(36px,5vw,56px) clamp(16px,4vw,48px);margin-top:clamp(32px,4vw,48px)}
+.fti{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(24px,4vw,48px)}
+.ftl{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.ftlm{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:6px;display:flex;align-items:center;justify-content:center}
+.ftlm svg{width:55%;height:55%;stroke:var(--navy);fill:none;stroke-width:2.2}
+.ftlt{font-size:15px;font-weight:500;color:#fff}.ftlt span{color:var(--gold-light);font-weight:600}
+.ftd{font-size:clamp(11px,.7rem,13px);color:rgba(255,255,255,.3);line-height:1.7;max-width:300px}
+.ftct{font-size:clamp(10px,.6rem,11px);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.ftlk{display:block;font-size:clamp(12px,.8rem,14px);color:rgba(255,255,255,.4);text-decoration:none;margin-bottom:10px;transition:color .2s}
+.ftlk:hover{color:var(--gold-light)}
+.ftb{max-width:1280px;margin:clamp(20px,3vw,32px) auto 0;padding-top:20px;border-top:.5px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between}
+.ftc{font-size:clamp(10px,.6rem,12px);color:rgba(255,255,255,.2)}
+
+/* Responsive */
+@media(max-width:900px){.nls{display:none}.mt{display:flex}.values{grid-template-columns:1fr}.fti{grid-template-columns:1fr 1fr;gap:24px}}
+@media(max-width:600px){.stats{grid-template-columns:1fr}.source-grid{grid-template-columns:repeat(2,1fr)}.fti{grid-template-columns:1fr;gap:20px}.ftb{flex-direction:column;gap:6px;text-align:center}.contact-row{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <a class="nav-logo" href="index.html"><div class="lm"><svg viewBox="0 0 18 18"><path d="M9 2v14M5 6h8"/><circle cx="9" cy="9" r="6" opacity="0.3"/></svg></div><div class="lt">The<span>Gospel</span>Feed</div></a>
+  <div class="nls"><a href="index.html">Feed</a><a href="#">Topics</a><a href="#">Sermons</a><a href="#">Saved</a></div>
+  <div class="nr"><button class="nc" onclick="window.location.href='index.html'">Back to Feed</button><button class="mt" onclick="window.location.href='index.html'"><span></span><span></span><span></span></button></div>
+</nav>
+
+<!-- Hero -->
+<section class="about-hero">
+  <div class="hm"><div class="ho ho1"></div><div class="ho ho2"></div></div>
+  <div class="hero-fade"></div>
+  <div class="about-hero-inner fu">
+    <div class="about-eyebrow">Our Mission</div>
+    <h1 class="about-title">We believe the best Christian content already exists. It just needs a better home.</h1>
+    <p class="about-subtitle">The Gospel Feed curates sermons, devotionals, and articles from the world's most trusted Christian voices — so you never miss what matters.</p>
+  </div>
+</section>
+
+<!-- Content -->
+<div class="about-content">
+
+  <!-- Stats -->
+  <div class="stats fu" style="animation-delay:.2s">
+    <div class="stat">
+      <div class="stat-num">15+</div>
+      <div class="stat-label">Trusted sources</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Auto-curated</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">Free</div>
+      <div class="stat-label">Always</div>
+    </div>
+  </div>
+
+  <!-- Origin story -->
+  <div class="section fu" style="animation-delay:.3s">
+    <div class="section-label">The origin story</div>
+    <h2 class="section-heading">Built at the intersection of cloud engineering and faith</h2>
+    <p class="section-text">This project was born from a simple frustration: there's incredible Christian content being published every single day — sermons that shift perspectives, devotionals that meet you where you are, articles that wrestle with hard questions — but it's scattered across dozens of websites, YouTube channels, and podcast feeds.</p>
+    <p class="section-text">As a cloud solutions architect, the solution felt obvious. Build an intelligent pipeline that pulls from the best sources automatically, scores content for quality, tags it by topic, and serves it in one clean daily feed. No algorithms chasing engagement. No clickbait. Just the best the Christian web has to offer, refreshed every morning.</p>
+    <p class="section-text">The Gospel Feed is what happens when technical infrastructure meets a heart for the global church.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- How it works -->
+  <div class="section fu" style="animation-delay:.1s">
+    <div class="section-label">How it works</div>
+    <h2 class="section-heading">Automated curation, human accountability</h2>
+    <p class="section-text">Every morning at 6 AM, our system fetches the latest content from over 15 trusted RSS feeds and YouTube channels. Each article is scored on four dimensions: recency, source reputation, title quality, and content depth. The top articles are auto-tagged by topic — Faith, Marriage, Leadership, Grief, Youth, Sermons, Devotionals — and published to the daily feed.</p>
+    <p class="section-text">The editor's pick is the highest-scoring article of the day, selected algorithmically but always reviewed by a human eye. We believe curation should be intelligent, but never impersonal.</p>
+    <p class="section-text">When you click any article, you go directly to the original source — Desiring God, The Gospel Coalition, Christianity Today, and others. We send them traffic, not take it. This platform is a gateway, not a gatekeeper.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Values -->
+  <div class="section fu" style="animation-delay:.1s">
+    <div class="section-label">What we stand for</div>
+    <h2 class="section-heading">Four commitments that guide everything we build</h2>
+    <div class="values">
+      <div class="value-card">
+        <div class="value-icon vi-gold"><svg viewBox="0 0 20 20"><path d="M10 2v16M4 8h12"/></svg></div>
+        <div class="value-title">Gospel-centered</div>
+        <div class="value-desc">Every source we include points to the finished work of Christ. We don't curate controversy — we curate truth, grace, and hope.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon vi-blue"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M4 10h12M10 4v12"/></svg></div>
+        <div class="value-title">Multi-denominational</div>
+        <div class="value-desc">Catholic, Baptist, Pentecostal, Anglican, non-denominational — if it proclaims Christ, it has a place here. The body is diverse.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon vi-green"><svg viewBox="0 0 20 20"><path d="M3 10c0-4 3-7 7-7s7 3 7 7-3 7-7 7-7-3-7-7z"/><path d="M8 10l2 2 4-4"/></svg></div>
+        <div class="value-title">Free and open</div>
+        <div class="value-desc">No paywall for the daily feed. No login required to read. The gospel is free, and access to good teaching should be too.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon vi-purple"><svg viewBox="0 0 20 20"><path d="M3 7l7-5 7 5v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z"/></svg></div>
+        <div class="value-title">Globally minded</div>
+        <div class="value-desc">Built to serve Christians in Lagos, Manila, São Paulo, London, and everywhere in between. Fast on slow connections. Readable on any device.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Sources -->
+  <div class="section fu" style="animation-delay:.1s">
+    <div class="section-label">Our sources</div>
+    <h2 class="section-heading">Curated from voices the global church already trusts</h2>
+    <p class="section-text">We only pull from sources with established theological credibility and a track record of faithfulness. Each source is assigned a trust tier and regularly reviewed.</p>
+    <div class="source-grid">
+      <div class="source-pill">Desiring God<div class="source-tier">Premier</div></div>
+      <div class="source-pill">The Gospel Coalition<div class="source-tier">Premier</div></div>
+      <div class="source-pill">Christianity Today<div class="source-tier">Premier</div></div>
+      <div class="source-pill">Ligonier Ministries<div class="source-tier">Premier</div></div>
+      <div class="source-pill">Bible Project<div class="source-tier">Premier</div></div>
+      <div class="source-pill">Crossway<div class="source-tier">Trusted</div></div>
+      <div class="source-pill">9Marks<div class="source-tier">Trusted</div></div>
+      <div class="source-pill">Relevant Magazine<div class="source-tier">Trusted</div></div>
+      <div class="source-pill">Church Leaders<div class="source-tier">Trusted</div></div>
+      <div class="source-pill">(in)courage<div class="source-tier">Trusted</div></div>
+      <div class="source-pill">Gospel in Life<div class="source-tier">Premier</div></div>
+      <div class="source-pill">Church Answers<div class="source-tier">Trusted</div></div>
+    </div>
+    <p class="section-text" style="margin-top:clamp(16px,2vw,24px);color:var(--t3);font-size:clamp(12px,.8rem,14px)">Know a source we should include? We're always looking to grow the feed with trusted voices. Reach out below.</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Contact -->
+  <div class="section fu" style="animation-delay:.1s">
+    <div class="section-label">Get in touch</div>
+    <h2 class="section-heading">We'd love to hear from you</h2>
+    <p class="section-text">Whether you want to suggest a source, report an issue, partner with us, or just say hello — our inbox is always open.</p>
+    <div class="contact-row">
+      <a class="contact-link" href="mailto:hello@thegospelfeed.com">
+        <svg viewBox="0 0 20 20"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="M2 6l8 5 8-5"/></svg>
+        hello@thegospelfeed.com
+      </a>
+      <a class="contact-link" href="https://twitter.com/thegospelfeed" target="_blank">
+        <svg viewBox="0 0 20 20"><path d="M18 4s-1 1-2 1 1-2 0-3c-1 1-2 1-3 1S11 2 10 3s-1 3 0 4C7 7 4 5 3 4c0 0-2 2 0 4l-2-1s0 3 3 4H2s1 3 4 3c0 0-3 2-6 2 0 0 3 1 6 1s9-3 9-10"/></svg>
+        @thegospelfeed
+      </a>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-card fu" style="animation-delay:.1s">
+    <div class="cta-glow"></div>
+    <div class="cta-glow2"></div>
+    <div class="cta-title">Start reading today's feed</div>
+    <p class="cta-sub">23+ articles curated this morning from the world's most trusted Christian voices. All free, all in one place.</p>
+    <a class="cta-btn" href="index.html">Go to today's feed →</a>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="ft">
+  <div class="fti">
+    <div><div class="ftl"><div class="ftlm"><svg viewBox="0 0 18 18"><path d="M9 2v14M5 6h8"/><circle cx="9" cy="9" r="6" opacity="0.3"/></svg></div><div class="ftlt">The<span>Gospel</span>Feed</div></div><p class="ftd">Your daily feed of the best sermons, devotionals, and Christian content from across the web. Curated for believers, by believers.</p></div>
+    <div><div class="ftct">Browse</div><a class="ftlk" href="index.html">Today's Feed</a><a class="ftlk" href="index.html">Topics</a><a class="ftlk" href="index.html">Sermons</a><a class="ftlk" href="index.html">Devotionals</a></div>
+    <div><div class="ftct">Topics</div><a class="ftlk" href="index.html">Faith</a><a class="ftlk" href="index.html">Marriage</a><a class="ftlk" href="index.html">Leadership</a><a class="ftlk" href="index.html">Grief</a><a class="ftlk" href="index.html">Youth</a></div>
+    <div><div class="ftct">About</div><a class="ftlk" href="about.html">Our Mission</a><a class="ftlk" href="about.html">Sources</a><a class="ftlk" href="mailto:hello@thegospelfeed.com">Contact</a><a class="ftlk" href="#">Privacy</a></div>
+  </div>
+  <div class="ftb"><span class="ftc">&copy; 2026 The Gospel Feed. All rights reserved.</span><span class="ftc">Made with faith · Lagos, Nigeria</span></div>
+</footer>
+
+</body>
+</html>
