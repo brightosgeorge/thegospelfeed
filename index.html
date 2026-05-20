@@ -164,7 +164,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <body>
 <nav class="nav">
   <a class="nav-logo" href="index.html"><div class="lm"><svg viewBox="0 0 18 18"><path d="M9 2v14M5 6h8"/><circle cx="9" cy="9" r="6" opacity="0.3"/></svg></div><div class="lt">The<span>Gospel</span>Feed</div></a>
-  <div class="nls"><a href="#" class="active">Feed</a><a href="#">Topics</a><a href="#">Sermons</a><a href="#">Saved</a></div>
+  <div class="nls"><a href="javascript:void(0)" class="active" onclick="activateFilter('all')">Feed</a><a href="javascript:void(0)" onclick="activateFilter('all')">Topics</a><a href="javascript:void(0)" onclick="activateFilter('sermon')">Sermons</a><a href="javascript:void(0)" onclick="activateFilter('all')">Saved</a></div>
   <div class="nr"><button class="ns"><svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4"/><path d="M10 10l3.5 3.5"/></svg></button><button class="nc">Get the digest</button><button class="mt" onclick="alert('Menu')"><span></span><span></span><span></span></button></div>
 </nav>
 <section class="hero">
@@ -208,18 +208,18 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <footer class="ft">
   <div class="fti">
     <div><div class="ftl"><div class="ftlm"><svg viewBox="0 0 18 18"><path d="M9 2v14M5 6h8"/><circle cx="9" cy="9" r="6" opacity="0.3"/></svg></div><div class="ftlt">The<span>Gospel</span>Feed</div></div><p class="ftd">Your daily feed of the best sermons, devotionals, and Christian content from across the web. Curated for believers, by believers.</p></div>
-    <div><div class="ftct">Browse</div><a class="ftlk" href="#filterBar" onclick="activateFilter('all')">Today's Feed</a><a class="ftlk" href="#filterBar" onclick="activateFilter('all')">Topics</a><a class="ftlk" href="#filterBar" onclick="activateFilter('sermon')">Sermons</a><a class="ftlk" href="#filterBar" onclick="activateFilter('devotional')">Devotionals</a><a class="ftlk" href="#" onclick="document.getElementById('nlEmail').focus();return false;">Newsletter</a></div>
-    <div><div class="ftct">Topics</div><a class="ftlk" href="#filterBar" onclick="activateFilter('faith')">Faith</a><a class="ftlk" href="#filterBar" onclick="activateFilter('marriage')">Marriage</a><a class="ftlk" href="#filterBar" onclick="activateFilter('leadership')">Leadership</a><a class="ftlk" href="#filterBar" onclick="activateFilter('grief')">Grief</a><a class="ftlk" href="#filterBar" onclick="activateFilter('youth')">Youth</a></div>
-    <div><div class="ftct">About</div><a class="ftlk" href="about.html">Our Mission</a><a class="ftlk" href="about.html#sources">Sources</a><a class="ftlk" href="about.html">Advertise</a><a class="ftlk" href="mailto:hello@thegospelfeed.com">Contact</a><a class="ftlk" href="#">Privacy</a></div>
+    <div><div class="ftct">Browse</div><a class="ftlk" href="javascript:void(0)" onclick="activateFilter('all')">Today's Feed</a><a class="ftlk" href="javascript:void(0)" onclick="activateFilter('all')">Topics</a><a class="ftlk" href="javascript:void(0)" onclick="activateFilter('sermon')">Sermons</a><a class="ftlk" href="javascript:void(0)" onclick="activateFilter('devotional')">Devotionals</a><a class="ftlk" href="javascript:void(0)" onclick="document.getElementById('nlEmail').focus()">Newsletter</a></div>
+    <div><div class="ftct">Topics</div><a class="ftlk" href="javascript:void(0)" onclick="activateFilter('faith')">Faith</a><a class="ftlk" href="javascript:void(0)" onclick="activateFilter('marriage')">Marriage</a><a class="ftlk" href="javascript:void(0)" onclick="activateFilter('leadership')">Leadership</a><a class="ftlk" href="javascript:void(0)" onclick="activateFilter('grief')">Grief</a><a class="ftlk" href="javascript:void(0)" onclick="activateFilter('youth')">Youth</a></div>
+    <div><div class="ftct">About</div><a class="ftlk" href="about.html">Our Mission</a><a class="ftlk" href="about.html">Sources</a><a class="ftlk" href="about.html">Advertise</a><a class="ftlk" href="mailto:hello@thegospelfeed.com">Contact</a><a class="ftlk" href="javascript:void(0)">Privacy</a></div>
   </div>
   <div class="ftb"><span class="ftc">&copy; 2026 The Gospel Feed. All rights reserved.</span><span class="ftc">Made with faith &middot; Lagos, Nigeria</span></div>
 </footer>
 <div class="bn"><div class="bni">
-  <a class="bnit active" href="#"><svg viewBox="0 0 20 20"><path d="M3 8l7-5 7 5v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8z"/></svg><span>Feed</span></a>
-  <a class="bnit" href="#"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 3"/></svg><span>Topics</span></a>
-  <a class="bnit" href="#"><svg viewBox="0 0 20 20"><path d="M3 3h14v14H3z"/><path d="M7 3V1M13 3V1M3 7h14"/></svg><span>Sermons</span></a>
-  <a class="bnit" href="#"><svg viewBox="0 0 20 20"><path d="M5 3h10v15l-5-3-5 3V3z"/></svg><span>Saved</span></a>
-  <a class="bnit" href="#"><svg viewBox="0 0 20 20"><circle cx="10" cy="6" r="3"/><path d="M3 18c0-4 3-7 7-7s7 3 7 7"/></svg><span>Profile</span></a>
+  <a class="bnit active" href="javascript:void(0)" onclick="activateFilter('all')"><svg viewBox="0 0 20 20"><path d="M3 8l7-5 7 5v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8z"/></svg><span>Feed</span></a>
+  <a class="bnit" href="javascript:void(0)" onclick="activateFilter('all')"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 3"/></svg><span>Topics</span></a>
+  <a class="bnit" href="javascript:void(0)" onclick="activateFilter('sermon')"><svg viewBox="0 0 20 20"><path d="M3 3h14v14H3z"/><path d="M7 3V1M13 3V1M3 7h14"/></svg><span>Sermons</span></a>
+  <a class="bnit" href="javascript:void(0)" onclick="activateFilter('all')"><svg viewBox="0 0 20 20"><path d="M5 3h10v15l-5-3-5 3V3z"/></svg><span>Saved</span></a>
+  <a class="bnit" href="about.html"><svg viewBox="0 0 20 20"><circle cx="10" cy="6" r="3"/><path d="M3 18c0-4 3-7 7-7s7 3 7 7"/></svg><span>About</span></a>
 </div></div>
 <script>
 // ─── Config ───
@@ -355,6 +355,8 @@ function activateFilter(topic){
     if(p.dataset.filter===topic) p.classList.add("active");
   });
   R(topic);
+  // Smooth scroll to the feed area
+  document.getElementById("cardGrid").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 // ─── Filter bar ───
