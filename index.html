@@ -164,7 +164,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <body>
 <nav class="nav">
   <a class="nav-logo" href="index.html"><div class="lm"><svg viewBox="0 0 18 18"><path d="M9 2v14M5 6h8"/><circle cx="9" cy="9" r="6" opacity="0.3"/></svg></div><div class="lt">The<span>Gospel</span>Feed</div></a>
-  <div class="nls"><a href="javascript:void(0)" class="active" onclick="activateFilter('all')">Feed</a><a href="javascript:void(0)" onclick="activateFilter('all')">Topics</a><a href="javascript:void(0)" onclick="activateFilter('sermon')">Sermons</a><a href="javascript:void(0)" onclick="activateFilter('all')">Saved</a></div>
+  <div class="nls"><a href="javascript:void(0)" class="active" onclick="activateFilter('all')">Feed</a><a href="javascript:void(0)" onclick="activateFilter('all')">Topics</a><a href="javascript:void(0)" onclick="activateFilter('sermon')">Sermons</a><a href="javascript:void(0)" onclick="showSaved()">Saved</a></div>
   <div class="nr"><button class="ns"><svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4"/><path d="M10 10l3.5 3.5"/></svg></button><button class="nc">Get the digest</button><button class="mt" onclick="alert('Menu')"><span></span><span></span><span></span></button></div>
 </nav>
 <section class="hero">
@@ -218,7 +218,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   <a class="bnit active" href="javascript:void(0)" onclick="activateFilter('all')"><svg viewBox="0 0 20 20"><path d="M3 8l7-5 7 5v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8z"/></svg><span>Feed</span></a>
   <a class="bnit" href="javascript:void(0)" onclick="activateFilter('all')"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 3"/></svg><span>Topics</span></a>
   <a class="bnit" href="javascript:void(0)" onclick="activateFilter('sermon')"><svg viewBox="0 0 20 20"><path d="M3 3h14v14H3z"/><path d="M7 3V1M13 3V1M3 7h14"/></svg><span>Sermons</span></a>
-  <a class="bnit" href="javascript:void(0)" onclick="activateFilter('all')"><svg viewBox="0 0 20 20"><path d="M5 3h10v15l-5-3-5 3V3z"/></svg><span>Saved</span></a>
+  <a class="bnit" href="javascript:void(0)" onclick="showSaved()"><svg viewBox="0 0 20 20"><path d="M5 3h10v15l-5-3-5 3V3z"/></svg><span>Saved</span></a>
   <a class="bnit" href="about.html"><svg viewBox="0 0 20 20"><circle cx="10" cy="6" r="3"/><path d="M3 18c0-4 3-7 7-7s7 3 7 7"/></svg><span>About</span></a>
 </div></div>
 <script>
@@ -228,7 +228,10 @@ const TM={faith:"tf",devotional:"td",leadership:"tl",marriage:"tm",grief:"tgr",y
 const CM={faith:"color:#1D4ED8",devotional:"color:#047857",leadership:"color:#B45309",marriage:"color:#6D28D9",grief:"color:#BE123C",youth:"color:#15803D",sermon:"color:#1D4ED8"};
 const SM={faith:"sb",devotional:"sg",leadership:"sa",marriage:"sp",grief:"sr",youth:"stl",sermon:"sb"};
 const HTAGS={faith:"tfa",devotional:"tdv",leadership:"tld",marriage:"tfa",grief:"tfa",youth:"tfa",sermon:"tfa"};
-const S=new Set();
+// ─── Persistent saves using localStorage ───
+function loadSaved(){try{return new Set(JSON.parse(localStorage.getItem("tgf_saved"))||[])}catch(e){return new Set()}}
+function saveToDisk(){localStorage.setItem("tgf_saved",JSON.stringify([...S]))}
+const S=loadSaved();
 let ALL_ARTICLES=[];
 
 // ─── Format date ───
@@ -345,7 +348,7 @@ function R(f){
   `).join("");
 }
 
-function T(id,btn){S.has(id)?S.delete(id):S.add(id);btn.classList.toggle("saved");}
+function T(id,btn){S.has(id)?S.delete(id):S.add(id);btn.classList.toggle("saved");saveToDisk();}
 
 // ─── Activate filter from footer links ───
 function activateFilter(topic){
@@ -356,6 +359,50 @@ function activateFilter(topic){
   });
   R(topic);
   // Smooth scroll to the feed area
+  document.getElementById("cardGrid").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+// ─── Show only saved/bookmarked articles ───
+function showSaved(){
+  const bar=document.getElementById("filterBar");
+  bar.querySelectorAll(".fp").forEach(p=>p.classList.remove("active"));
+
+  const savedArticles=ALL_ARTICLES.filter(a=>S.has(a.id));
+  const countEl=document.querySelector(".sha");
+  if(countEl) countEl.textContent=`${savedArticles.length} saved →`;
+
+  const cards=savedArticles.slice(0,4),rows=savedArticles.slice(4);
+  document.getElementById("cardGrid").innerHTML=savedArticles.length===0
+    ? '<div style="grid-column:1/-1;text-align:center;padding:clamp(32px,4vw,48px) 0;color:var(--t3);"><div style="font-family:var(--serif);font-size:clamp(18px,1.5vw,24px);color:var(--t1);margin-bottom:8px;">No saved articles yet</div><div style="font-size:clamp(13px,.85rem,15px);">Click the bookmark icon on any article to save it for later.</div></div>'
+    : cards.map((a,i)=>`
+    <div class="cd fu" style="animation-delay:${i*.08}s;cursor:pointer" onclick="window.open('${a.url}','_blank')">
+      <div class="cs ${SM[a.topic]||'sb'}"></div>
+      <div class="cdt">
+        <span class="tg ${TM[a.topic]||'tf'}">${a.topic}</span>
+        <button class="sv saved" onclick="event.stopPropagation();T('${a.id}',this);showSaved();">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 2h10v13l-5-3-5 3V2z"/></svg>
+        </button>
+      </div>
+      <div class="cdtl">${a.title}</div>
+      <div class="cdf">
+        <span class="cds">${a.source_name}</span>
+        <span class="cdtm">${a.read_time} · ${a.time_ago||'today'}</span>
+      </div>
+    </div>
+  `).join("");
+
+  document.getElementById("moreHead").style.display=rows.length?"flex":"none";
+  document.getElementById("listSection").innerHTML=rows.map((a,i)=>`
+    <div class="lr fu" style="animation-delay:${i*.05}s;cursor:pointer" onclick="window.open('${a.url}','_blank')">
+      <div class="lrn">${cards.length+i+1}</div>
+      <div class="lrb">
+        <div class="lrtg" style="${CM[a.topic]||'color:#1D4ED8'}">${a.topic}</div>
+        <div class="lrt">${a.title}</div>
+        <div class="lrm">${a.source_name} · ${a.read_time} · ${a.time_ago||'today'}</div>
+      </div>
+    </div>
+  `).join("");
+
   document.getElementById("cardGrid").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
