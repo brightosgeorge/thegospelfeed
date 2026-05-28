@@ -165,7 +165,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <nav class="nav">
   <a class="nav-logo" href="index.html"><div class="lm"><svg viewBox="0 0 18 18"><path d="M9 2v14M5 6h8"/><circle cx="9" cy="9" r="6" opacity="0.3"/></svg></div><div class="lt">The<span>Gospel</span>Feed</div></a>
   <div class="nls"><a href="javascript:void(0)" class="active" onclick="activateFilter('all')">Feed</a><a href="javascript:void(0)" onclick="activateFilter('all')">Topics</a><a href="javascript:void(0)" onclick="activateFilter('sermon')">Sermons</a><a href="javascript:void(0)" onclick="showSaved()">Saved</a></div>
-  <div class="nr"><button class="ns"><svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4"/><path d="M10 10l3.5 3.5"/></svg></button><button class="nc">Get the digest</button><button class="mt" onclick="alert('Menu')"><span></span><span></span><span></span></button></div>
+  <div class="nr"><button class="ns"><svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4"/><path d="M10 10l3.5 3.5"/></svg></button><button class="nc" onclick="document.getElementById('nlEmail').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.getElementById('nlEmail').focus(),600)">Get the digest</button><button class="mt" onclick="alert('Menu')"><span></span><span></span><span></span></button></div>
 </nav>
 <section class="hero">
   <div class="hm"><div class="ho ho1"></div><div class="ho ho2"></div><div class="ho ho3"></div></div>
