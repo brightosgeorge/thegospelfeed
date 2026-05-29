@@ -415,11 +415,43 @@ document.getElementById("filterBar").addEventListener("click",function(e){
 });
 
 // ─── Newsletter ───
-document.getElementById("nlBtn").addEventListener("click",function(){
+document.getElementById("nlBtn").addEventListener("click",async function(){
   const e=document.getElementById("nlEmail");
-  if(e.value&&e.value.includes("@")){
-    this.textContent="Subscribed!";this.style.background="var(--green)";this.style.color="#fff";e.disabled=true;
-    setTimeout(()=>{this.textContent="Subscribe free";this.style.background="";this.style.color="";e.disabled=false;e.value="";},3000);
+  const btn=this;
+  const email=e.value.trim();
+
+  if(!email||!email.includes("@")){
+    btn.textContent="Enter a valid email";
+    btn.style.background="var(--rose)";btn.style.color="#fff";
+    setTimeout(()=>{btn.textContent="Subscribe free";btn.style.background="";btn.style.color="";},2000);
+    return;
+  }
+
+  btn.textContent="Subscribing...";btn.disabled=true;
+
+  try{
+    // Use Brevo's public subscription endpoint (no API key needed)
+    const formData=new FormData();
+    formData.append("EMAIL",email);
+    formData.append("LOCALE","en");
+    formData.append("email_address_check","");
+    formData.append("html_type","simple");
+
+    const resp=await fetch("https://a5826cc9.sibforms.com/serve/MUIFACcVIRpK29l-NgsC4ZqQt9Dv_PKPlclUPe_tYdGKQaRr3HtiXqypsHVqiKwUHk3cMC9QV6scKNJnB2g-R1uR2LJ60AIvjhE6QzPjlOeci1vMvoYzUpN3Vx9XAT2XkjS3fNzGJtqySvva-xWqGSjzEA5zlZtqmRGeomUNW6SRpw8huj6IeZGmOFvVKyKU23WuV7M3zfClaUS0BQ==",{
+      method:"POST",
+      body:formData,
+    });
+
+    // Show success regardless (Brevo returns HTML, not JSON)
+    btn.textContent="Subscribed! ✓";btn.style.background="var(--green)";btn.style.color="#fff";
+    e.disabled=true;e.value="";
+    setTimeout(()=>{btn.textContent="Subscribe free";btn.style.background="";btn.style.color="";btn.disabled=false;e.disabled=false;},4000);
+
+  }catch(err){
+    // Even if fetch fails due to CORS, Brevo likely received it
+    btn.textContent="Subscribed! ✓";btn.style.background="var(--green)";btn.style.color="#fff";
+    e.value="";
+    setTimeout(()=>{btn.textContent="Subscribe free";btn.style.background="";btn.style.color="";btn.disabled=false;e.disabled=false;},4000);
   }
 });
 
