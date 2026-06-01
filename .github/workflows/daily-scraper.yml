@@ -2,12 +2,9 @@ name: Daily Content Scraper
 
 on:
   schedule:
-    # Run every day at 6:00 AM UTC
     - cron: '0 6 * * *'
   workflow_dispatch:
-    # Allow manual trigger from GitHub Actions tab
 
-# Grant write permission so the workflow can push feed.json back to the repo
 permissions:
   contents: write
 
@@ -34,6 +31,9 @@ jobs:
       - name: Run scraper
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
         run: |
           cd scrapers
           python rss_scraper.py

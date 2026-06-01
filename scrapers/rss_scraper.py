@@ -332,6 +332,16 @@ def run_scraper():
 
     print(f"\n✓ Saved {len(quality_articles)} articles to {OUTPUT_FILE}")
 
+    # Write to DynamoDB (if running in AWS with proper permissions)
+    try:
+        from db import put_articles
+        db_count = put_articles(quality_articles)
+        print(f"✓ Wrote {db_count} articles to DynamoDB")
+    except ImportError:
+        print("⚠ db module not found — skipping DynamoDB write (local mode)")
+    except Exception as e:
+        print(f"⚠ DynamoDB write failed: {e} (articles still saved to feed.json)")
+
     if quality_articles:
         pick = next((a for a in quality_articles if a["is_editors_pick"]), None)
         if pick:
