@@ -223,7 +223,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 </div></div>
 <script>
 // ─── Config ───
-const FEED_URL = "scrapers/output/feed.json";
+const API_URL = "https://scefrep0x9.execute-api.us-east-1.amazonaws.com";
 const TM={faith:"tf",devotional:"td",leadership:"tl",marriage:"tm",grief:"tgr",youth:"ty",sermon:"ts"};
 const CM={faith:"color:#1D4ED8",devotional:"color:#047857",leadership:"color:#B45309",marriage:"color:#6D28D9",grief:"color:#BE123C",youth:"color:#15803D",sermon:"color:#1D4ED8"};
 const SM={faith:"sb",devotional:"sg",leadership:"sa",marriage:"sp",grief:"sr",youth:"stl",sermon:"sb"};
@@ -466,14 +466,14 @@ document.querySelectorAll(".bnit").forEach(i=>{
 // ─── Fetch feed and initialize ───
 async function init(){
   try{
-    const resp=await fetch(FEED_URL);
+    const resp=await fetch(`${API_URL}/feed`);
     if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data=await resp.json();
 
-    // Only show articles that are marked as live
+    // API returns articles directly
     ALL_ARTICLES=data.articles.filter(a=>a.is_live!==false);
 
-    console.log(`Loaded ${ALL_ARTICLES.length} articles from feed.json`);
+    console.log(`Loaded ${ALL_ARTICLES.length} articles from API (DynamoDB)`);
 
     // Populate all sections
     populateHero(ALL_ARTICLES);
@@ -481,8 +481,21 @@ async function init(){
     R("all");
 
   }catch(err){
-    console.warn("Could not load feed.json, using fallback:",err.message);
-    // Fallback: show a helpful message
+    console.warn("API fetch failed, trying feed.json fallback:",err.message);
+    // Fallback to feed.json if API is down
+    try{
+      const resp2=await fetch("scrapers/output/feed.json");
+      if(resp2.ok){
+        const data2=await resp2.json();
+        ALL_ARTICLES=data2.articles.filter(a=>a.is_live!==false);
+        console.log(`Loaded ${ALL_ARTICLES.length} articles from feed.json fallback`);
+        populateHero(ALL_ARTICLES);
+        populateTrending(ALL_ARTICLES);
+        R("all");
+        return;
+      }
+    }catch(e){}
+    // Both failed — show welcome message
     document.getElementById("heroTitle").textContent="Welcome to The Gospel Feed";
     document.getElementById("heroSource").textContent="Your daily curated Christian content";
     document.getElementById("heroAuthor").textContent="Run the scraper to populate";
