@@ -157,6 +157,11 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .bnit svg{width:20px;height:20px;stroke:rgba(255,255,255,.35);fill:none;stroke-width:1.5}
 .bnit span{font-size:10px;color:rgba(255,255,255,.35);font-weight:500}
 .bnit.active svg{stroke:var(--gold)}.bnit.active span{color:var(--gold)}
+.mob-menu{display:none;position:fixed;top:clamp(56px,7vw,72px);left:0;right:0;background:rgba(10,22,40,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:8px 16px 16px;z-index:99;border-bottom:.5px solid rgba(212,175,55,.15);animation:fade-in .2s ease}
+.mob-menu.open{display:block}
+.mob-menu a{display:block;font-size:16px;color:rgba(255,255,255,.55);text-decoration:none;padding:14px 0;border-bottom:.5px solid rgba(255,255,255,.06);transition:color .2s;font-weight:400}
+.mob-menu a:last-child{border-bottom:none}
+.mob-menu a:hover,.mob-menu a:active{color:var(--gold-light)}
 @media(max-width:900px){.nls{display:none}.mt{display:flex}.hgrid{grid-template-columns:1fr}.main{grid-template-columns:1fr}}
 @media(max-width:600px){.cg{grid-template-columns:1fr}.ht{flex-direction:column;align-items:flex-start;gap:8px}.fti{grid-template-columns:1fr;gap:20px}.ftb{flex-direction:column;gap:6px;text-align:center}.bn{display:block}.main{padding-bottom:100px}.sv{width:36px;height:36px}}
 </style>
@@ -165,8 +170,15 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 <nav class="nav">
   <a class="nav-logo" href="index.html"><div class="lm"><svg viewBox="0 0 18 18"><path d="M9 2v14M5 6h8"/><circle cx="9" cy="9" r="6" opacity="0.3"/></svg></div><div class="lt">The<span>Gospel</span>Feed</div></a>
   <div class="nls"><a href="javascript:void(0)" class="active" onclick="activateFilter('all')">Feed</a><a href="javascript:void(0)" onclick="activateFilter('all')">Topics</a><a href="javascript:void(0)" onclick="activateFilter('sermon')">Sermons</a><a href="javascript:void(0)" onclick="showSaved()">Saved</a></div>
-  <div class="nr"><button class="ns"><svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4"/><path d="M10 10l3.5 3.5"/></svg></button><button class="nc" onclick="document.getElementById('nlEmail').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.getElementById('nlEmail').focus(),600)">Get the digest</button><button class="mt" onclick="alert('Menu')"><span></span><span></span><span></span></button></div>
+  <div class="nr"><button class="ns"><svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="4"/><path d="M10 10l3.5 3.5"/></svg></button><button class="nc" onclick="document.getElementById('nlEmail').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.getElementById('nlEmail').focus(),600)">Get the digest</button><button class="mt" onclick="document.getElementById('mobMenu').classList.toggle('open')"><span></span><span></span><span></span></button></div>
 </nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="javascript:void(0)" onclick="activateFilter('all');document.getElementById('mobMenu').classList.remove('open')">Feed</a>
+  <a href="javascript:void(0)" onclick="activateFilter('all');document.getElementById('mobMenu').classList.remove('open')">Topics</a>
+  <a href="javascript:void(0)" onclick="activateFilter('sermon');document.getElementById('mobMenu').classList.remove('open')">Sermons</a>
+  <a href="javascript:void(0)" onclick="showSaved();document.getElementById('mobMenu').classList.remove('open')">Saved</a>
+  <a href="about.html">About</a>
+</div>
 <section class="hero">
   <div class="hm"><div class="ho ho1"></div><div class="ho ho2"></div><div class="ho ho3"></div></div>
   <div class="hero-fade"></div>
@@ -430,28 +442,24 @@ document.getElementById("nlBtn").addEventListener("click",async function(){
   btn.textContent="Subscribing...";btn.disabled=true;
 
   try{
-    // Use Brevo's public subscription endpoint (no API key needed)
-    const formData=new FormData();
-    formData.append("EMAIL",email);
-    formData.append("LOCALE","en");
-    formData.append("email_address_check","");
-    formData.append("html_type","simple");
-
-    const resp=await fetch("https://a5826cc9.sibforms.com/serve/MUIFACcVIRpK29l-NgsC4ZqQt9Dv_PKPlclUPe_tYdGKQaRr3HtiXqypsHVqiKwUHk3cMC9QV6scKNJnB2g-R1uR2LJ60AIvjhE6QzPjlOeci1vMvoYzUpN3Vx9XAT2XkjS3fNzGJtqySvva-xWqGSjzEA5zlZtqmRGeomUNW6SRpw8huj6IeZGmOFvVKyKU23WuV7M3zfClaUS0BQ==",{
+    const resp=await fetch(`${API_URL}/subscribe`,{
       method:"POST",
-      body:formData,
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email:email}),
     });
+    const data=await resp.json();
 
-    // Show success regardless (Brevo returns HTML, not JSON)
-    btn.textContent="Subscribed! ✓";btn.style.background="var(--green)";btn.style.color="#fff";
-    e.disabled=true;e.value="";
+    if(resp.ok){
+      btn.textContent="Subscribed! ✓";btn.style.background="var(--green)";btn.style.color="#fff";
+      e.disabled=true;e.value="";
+    } else {
+      throw new Error(data.error||"Failed");
+    }
     setTimeout(()=>{btn.textContent="Subscribe free";btn.style.background="";btn.style.color="";btn.disabled=false;e.disabled=false;},4000);
-
   }catch(err){
-    // Even if fetch fails due to CORS, Brevo likely received it
-    btn.textContent="Subscribed! ✓";btn.style.background="var(--green)";btn.style.color="#fff";
-    e.value="";
-    setTimeout(()=>{btn.textContent="Subscribe free";btn.style.background="";btn.style.color="";btn.disabled=false;e.disabled=false;},4000);
+    console.error("Subscribe error:",err);
+    btn.textContent="Try again";btn.style.background="var(--rose)";btn.style.color="#fff";
+    setTimeout(()=>{btn.textContent="Subscribe free";btn.style.background="";btn.style.color="";btn.disabled=false;},3000);
   }
 });
 
@@ -507,6 +515,7 @@ async function init(){
 }
 
 init();
+window.addEventListener('scroll',()=>{const m=document.getElementById('mobMenu');if(m&&m.classList.contains('open'))m.classList.remove('open');});
 </script>
 </body>
 </html>
